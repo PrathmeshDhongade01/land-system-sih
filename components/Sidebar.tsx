@@ -1,20 +1,21 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard,
-  FileText,
-  Map,
-  Layers,
+  Map as MapIcon,
   ShieldCheck,
   LandPlot,
   UserCheck,
   Menu,
   X,
-  Inbox,
-  FolderPlus,
+  FileText,
+  Wallet,
+  AlertTriangle,
+  BarChart3,
+  Settings,
   Eye,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -23,30 +24,84 @@ import { createClient } from '@/lib/supabase/client'
 function ChakraEmblem({ className }: { className?: string }) {
   const spokes = Array.from({ length: 24 })
   return (
-    <svg
-      viewBox="0 0 100 100"
-      className={className}
-      role="img"
-      aria-label="Ashoka Chakra emblem"
-    >
+    <svg viewBox="0 0 100 100" className={className} role="img" aria-label="Ashoka Chakra emblem">
       <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" strokeWidth="4" />
       <circle cx="50" cy="50" r="6" fill="currentColor" />
       {spokes.map((_, i) => {
         const angle = (i * 360) / spokes.length
         return (
-          <line
-            key={i}
-            x1="50" y1="50" x2="50" y2="8"
+          <line key={i} x1="50" y1="50" x2="50" y2="8"
             stroke="currentColor" strokeWidth="1.5"
-            transform={`rotate(${angle} 50 50)`}
-          />
+            transform={`rotate(${angle} 50 50)`} />
         )
       })}
     </svg>
   )
 }
 
-/* Role display name helper (keeps DB value 'MoRTH Nodal Officer' unchanged) */
+type NavItem = { name: string; href: string; icon: React.ElementType }
+type NavGroup = { label: string; items: NavItem[] }
+
+function getNavGroups(role: string | null): NavGroup[] {
+  if (!role) return []
+
+  const isAdmin = role === 'Admin'
+  const isMoRTH = role === 'MoRTH Nodal Officer'
+  const isCALA = role === 'CALA'
+  const isFieldOfficer = role === 'Field Officer'
+  const isViewer = role === 'Viewer'
+
+  if (isFieldOfficer) {
+    return [
+      { label: 'DASHBOARD', items: [{ name: 'My Dashboard', href: '/', icon: LayoutDashboard }] },
+      {
+        label: 'MY WORK',
+        items: [
+          { name: 'My Field Verification', href: '/field-verification', icon: LandPlot },
+          { name: 'My Assignments', href: '/assignments', icon: UserCheck },
+        ],
+      },
+      { label: 'ACTIONS', items: [{ name: 'Alerts', href: '/', icon: AlertTriangle }] },
+    ]
+  }
+
+  if (isViewer) {
+    return [
+      { label: 'DASHBOARD', items: [{ name: 'Dashboard', href: '/', icon: LayoutDashboard }] },
+      { label: 'OVERVIEW', items: [{ name: 'Projects & Map', href: '/', icon: MapIcon }] },
+      { label: 'INSIGHTS', items: [{ name: 'Reports / Overview', href: '/workflows', icon: BarChart3 }] },
+    ]
+  }
+
+  const groups: NavGroup[] = [
+    { label: 'DASHBOARD', items: [{ name: 'Dashboard', href: '/', icon: LayoutDashboard }] },
+  ]
+
+  const coreItems: NavItem[] = [
+    { name: 'Projects & Map', href: '/projects/new', icon: MapIcon },
+    { name: 'Field Verification', href: '/field-verification', icon: LandPlot },
+  ]
+  if (!isMoRTH) coreItems.push({ name: 'Assignments', href: '/assignments', icon: UserCheck })
+  groups.push({ label: 'CORE', items: coreItems })
+
+  const mgmtItems: NavItem[] = [
+    { name: 'Acquisition Workflow', href: '/workflows', icon: FileText },
+  ]
+  if (!isMoRTH) mgmtItems.push({ name: 'Compensation & R&R', href: '/workflows', icon: Wallet })
+  mgmtItems.push({ name: 'Alerts & Actions', href: '/', icon: AlertTriangle })
+  groups.push({ label: 'MANAGEMENT', items: mgmtItems })
+
+  if (!isCALA) {
+    groups.push({ label: 'INSIGHTS', items: [{ name: 'Reports & Analytics', href: '/workflows', icon: BarChart3 }] })
+  }
+
+  if (isAdmin) {
+    groups.push({ label: 'ADMINISTRATION', items: [{ name: 'Administration', href: '/projects/new', icon: Settings }] })
+  }
+
+  return groups
+}
+
 function getRoleDisplayLabel(role: string | null): string {
   if (!role) return ''
   if (role === 'MoRTH Nodal Officer') return 'MoRD Nodal Officer'
@@ -76,30 +131,13 @@ export default function Sidebar() {
     })
   }, [])
 
-  /* ── Navigation items — always visible ── */
-  const coreNavItems = [
-    { name: 'Dashboard',           href: '/',                  icon: LayoutDashboard },
-    { name: 'Statutory Workflows', href: '/workflows',         icon: FileText },
-    { name: 'Field Verification',  href: '/field-verification', icon: LandPlot },
-    { name: 'Parcel Assignments',  href: '/assignments',       icon: UserCheck },
-  ]
-
-  /* ── My Tasks — only for Field Officer ── */
-  const fieldOfficerItems =
-    userRole === 'Field Officer'
-      ? [{ name: 'My Tasks', href: '/#my-tasks', icon: Inbox }]
-      : []
-
-  /* ── Create Project — Admin / SLAO / MoRD Nodal Officer ── */
-  const projectCreatorItems =
-    userRole && ['Admin', 'SLAO', 'MoRTH Nodal Officer'].includes(userRole)
-      ? [{ name: 'Create Project', href: '/projects/new', icon: FolderPlus }]
-      : []
-
-  const allNavItems = [...fieldOfficerItems, ...coreNavItems, ...projectCreatorItems]
-
-  /* Viewer gets a read-only indicator */
+  const navGroups = getNavGroups(userRole)
   const isViewer = userRole === 'Viewer'
+
+  function isActive(href: string): boolean {
+    if (href === '/') return pathname === '/'
+    return pathname === href || pathname.startsWith(href + '/')
+  }
 
   return (
     <aside className="w-full md:w-64 shrink-0 bg-slate-900 text-white flex flex-col md:min-h-screen border-b md:border-b-0 md:border-r border-slate-800 shadow-xl relative z-50">
@@ -117,34 +155,28 @@ export default function Sidebar() {
             <ChakraEmblem className="size-7" />
           </div>
           <div className="min-w-0 leading-tight">
-            <p className="truncate text-[10px] font-semibold uppercase tracking-wider text-amber-400">
-              Govt of India
-            </p>
-            <h2 className="truncate font-serif text-sm font-bold text-slate-100">
-              NLAMS Portal
-            </h2>
-            <p className="truncate text-[10px] text-slate-400 hidden md:block">MoRD Acquisition</p>
+            <p className="truncate text-[10px] font-semibold uppercase tracking-wider text-amber-400">Govt of India</p>
+            <h2 className="truncate font-serif text-sm font-bold text-slate-100">NLAMS Portal</h2>
+            <p className="truncate text-[10px] text-slate-400 hidden md:block">Land Acquisition Management</p>
           </div>
         </div>
-
-        {/* Mobile menu button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden p-2 text-slate-400 hover:text-white"
+          className="md:hidden p-2 text-slate-400 hover:text-white rounded-md"
+          aria-label={isOpen ? 'Close navigation' : 'Open navigation'}
+          aria-expanded={isOpen}
         >
-          {isOpen ? <X className="size-6" /> : <Menu className="size-6" />}
+          {isOpen ? <X className="size-5" /> : <Menu className="size-5" />}
         </button>
       </div>
 
-      <div className={cn('flex-col flex-1 bg-slate-900', isOpen ? 'flex' : 'hidden md:flex')}>
+      <div className={cn('flex-col flex-1 overflow-y-auto bg-slate-900', isOpen ? 'flex' : 'hidden md:flex')}>
         {/* Role badge */}
         {userRole && (
-          <div className="px-4 pt-3 pb-1">
+          <div className="px-4 pt-3 pb-0">
             <span className={cn(
               'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider',
-              isViewer
-                ? 'bg-slate-700 text-slate-300'
-                : 'bg-blue-900/60 text-blue-300',
+              isViewer ? 'bg-slate-700 text-slate-300' : 'bg-blue-900/60 text-blue-300',
             )}>
               {isViewer && <Eye className="size-3" />}
               {getRoleDisplayLabel(userRole)}
@@ -152,49 +184,41 @@ export default function Sidebar() {
           </div>
         )}
 
-        {/* Navigation Links */}
-        <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto">
-          <p className="px-3 text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-2">
-            Navigation Menu
-          </p>
-          {allNavItems.map((item) => {
-            const Icon = item.icon
-            /* My Tasks points to homepage anchor, treat as active when on '/' */
-            const isActive =
-              item.href === '/#my-tasks' ? pathname === '/' : pathname === item.href
-
-            /* My Tasks gets a special blue highlight */
-            const isMyTasks = item.href === '/#my-tasks'
-
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setIsOpen(false)}
-                className={cn(
-                  'flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all duration-150',
-                  isActive
-                    ? isMyTasks
-                      ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30'
-                      : 'bg-blue-600 text-white shadow-md shadow-blue-900/30'
-                    : isMyTasks
-                    ? 'text-blue-300 bg-blue-900/30 hover:bg-blue-800/50 hover:text-white'
-                    : 'text-slate-300 hover:bg-slate-800/80 hover:text-white',
-                )}
-              >
-                <Icon className={cn('size-4.5', isActive ? 'text-white' : isMyTasks ? 'text-blue-400' : 'text-slate-400')} />
-                <span>{item.name}</span>
-                {isMyTasks && (
-                  <span className="ml-auto rounded-full bg-blue-500 px-1.5 py-0.5 text-[9px] font-bold text-white leading-tight">
-                    NEW
-                  </span>
-                )}
-              </Link>
-            )
-          })}
+        {/* Navigation groups */}
+        <nav className="flex-1 p-3 pt-4 space-y-5 overflow-y-auto" aria-label="Main navigation">
+          {navGroups.map((group) => (
+            <div key={group.label}>
+              <p className="px-3 mb-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500 select-none">
+                {group.label}
+              </p>
+              <div className="space-y-0.5">
+                {group.items.map((item) => {
+                  const active = isActive(item.href)
+                  const Icon = item.icon
+                  return (
+                    <Link
+                      key={`${group.label}|${item.name}`}
+                      href={item.href}
+                      onClick={() => setIsOpen(false)}
+                      className={cn(
+                        'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150',
+                        active
+                          ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30'
+                          : 'text-slate-300 hover:bg-slate-800/80 hover:text-white',
+                      )}
+                      aria-current={active ? 'page' : undefined}
+                    >
+                      <Icon className={cn('size-4 shrink-0', active ? 'text-white' : 'text-slate-400')} />
+                      <span className="truncate">{item.name}</span>
+                    </Link>
+                  )
+                })}
+              </div>
+            </div>
+          ))}
         </nav>
 
-        {/* Sidebar Footer */}
+        {/* Footer */}
         <div className="p-4 border-t border-slate-800 text-xs text-slate-400 space-y-2">
           {isViewer && (
             <div className="flex items-center gap-2 text-amber-400 bg-amber-950/40 border border-amber-800/50 rounded-md p-2">
@@ -206,9 +230,7 @@ export default function Sidebar() {
             <ShieldCheck className="size-4 shrink-0" />
             <span className="truncate text-[11px] font-medium">Official Session Active</span>
           </div>
-          <p className="text-[10px] text-slate-400 text-center">
-            NLAMS v3.2.1 · Classified
-          </p>
+          <p className="text-[10px] text-slate-500 text-center">NLAMS v3.2.1 · Classified</p>
         </div>
       </div>
     </aside>

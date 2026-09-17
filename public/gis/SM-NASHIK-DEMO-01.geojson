@@ -1,0 +1,2700 @@
+{
+  "type": "FeatureCollection",
+  "name": "SM-NASHIK-DEMO-01-COMPOSITE-GIS",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            73.782293,
+            19.768017
+          ],
+          [
+            73.818,
+            19.786
+          ],
+          [
+            73.855,
+            19.804
+          ],
+          [
+            73.895,
+            19.823
+          ],
+          [
+            73.935,
+            19.842
+          ],
+          [
+            73.975,
+            19.856
+          ],
+          [
+            74.015,
+            19.868
+          ],
+          [
+            74.055,
+            19.878
+          ],
+          [
+            74.095,
+            19.889
+          ],
+          [
+            74.135,
+            19.901
+          ]
+        ]
+      },
+      "properties": {
+        "route_id": "ME-2",
+        "route_name": "Mumbai–Nagpur Expressway (Samruddhi Mahamarg)",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "segment": "Nashik district demonstration segment",
+        "length_km_approx": 39.92,
+        "route_geometry_note": "Approximate public-route contextual geometry for prototype demonstration.",
+        "is_synthetic": false,
+        "layer_type": "route",
+        "name": "Samruddhi Expressway Corridor Alignment"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.81786729496604,
+              19.786240198931672
+            ],
+            [
+              73.85487030531272,
+              19.80424167376185
+            ],
+            [
+              73.8948715118901,
+              19.82324225753834
+            ],
+            [
+              73.93488570276733,
+              19.8422490061758
+            ],
+            [
+              73.97490695557252,
+              19.856256451802615
+            ],
+            [
+              74.01492005182668,
+              19.868260385364582
+            ],
+            [
+              74.05492339231091,
+              19.87826122556368
+            ],
+            [
+              74.09491667635955,
+              19.889259382702818
+            ],
+            [
+              74.13491339406544,
+              19.90125840191096
+            ],
+            [
+              74.13508660563765,
+              19.900741598028986
+            ],
+            [
+              74.09508332335233,
+              19.888740617240117
+            ],
+            [
+              74.05507660741995,
+              19.877738774385566
+            ],
+            [
+              74.01507994789371,
+              19.867739614580923
+            ],
+            [
+              73.97509304411037,
+              19.855743548128302
+            ],
+            [
+              73.93511429685998,
+              19.84175099372769
+            ],
+            [
+              73.8951285234511,
+              19.822757759329004
+            ],
+            [
+              73.85512969428049,
+              19.803758326118086
+            ],
+            [
+              73.8181327046209,
+              19.78575980094304
+            ],
+            [
+              73.78242750475543,
+              19.767777717969064
+            ],
+            [
+              73.7821584948279,
+              19.76825628190226
+            ],
+            [
+              73.81786729496604,
+              19.786240198931672
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "project_code": "SM-NASHIK-DEMO-01",
+        "corridor_width_m": 60,
+        "buffer_each_side_m": 30,
+        "area_sqm": 2395027.25,
+        "area_ha": 239.5027,
+        "is_synthetic": true,
+        "data_note": "Derived by buffering route 30 m on each side.",
+        "layer_type": "corridor",
+        "name": "60 m Acquisition Corridor (30 m Buffer Each Side)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.78784228733048,
+              19.766288792711112
+            ],
+            [
+              73.78659152777712,
+              19.77026430947016
+            ],
+            [
+              73.78907706590374,
+              19.771516354791547
+            ],
+            [
+              73.79097284240436,
+              19.772471282652774
+            ],
+            [
+              73.79331884214061,
+              19.769047450212458
+            ],
+            [
+              73.78784228733048,
+              19.766288792711112
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-101",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Vihigaon",
+        "owner_reference": "DEMO-OWNER-101",
+        "land_use": "Agricultural",
+        "total_area_sqm": 263250,
+        "total_area_ha": 26.325,
+        "affected_area_sqm": 19968.58,
+        "affected_area_ha": 1.9969,
+        "affected_percentage": 7.59,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-101"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.79946497738572,
+              19.77654382044797
+            ],
+            [
+              73.79807274141658,
+              19.781067714722223
+            ],
+            [
+              73.80105303533375,
+              19.782478556279358
+            ],
+            [
+              73.80327498368229,
+              19.783507433220304
+            ],
+            [
+              73.80592537923178,
+              19.77966861897817
+            ],
+            [
+              73.79946497738572,
+              19.77654382044797
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-102",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Kasarwadi",
+        "owner_reference": "DEMO-OWNER-102",
+        "land_use": "Orchard",
+        "total_area_sqm": 348347.37,
+        "total_area_ha": 34.8347,
+        "affected_area_sqm": 36380.35,
+        "affected_area_ha": 3.638,
+        "affected_percentage": 10.44,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-102"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.81538336317476,
+              19.77915630114985
+            ],
+            [
+              73.81384280025281,
+              19.784241328206818
+            ],
+            [
+              73.81732614340403,
+              19.785796019416377
+            ],
+            [
+              73.81988255074573,
+              19.786883941165005
+            ],
+            [
+              73.82283943630551,
+              19.782625786712035
+            ],
+            [
+              73.81538336317476,
+              19.77915630114985
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-103",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Wadivarhe",
+        "owner_reference": "DEMO-OWNER-103",
+        "land_use": "Agricultural",
+        "total_area_sqm": 446286.19,
+        "total_area_ha": 44.6286,
+        "affected_area_sqm": 31866.37,
+        "affected_area_ha": 3.1866,
+        "affected_percentage": 7.14,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-103"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.82666546684177,
+              19.790013480792272
+            ],
+            [
+              73.82517252824046,
+              19.795473942177814
+            ],
+            [
+              73.82913208155064,
+              19.797214853263526
+            ],
+            [
+              73.83198802014346,
+              19.798418723204428
+            ],
+            [
+              73.8351846276139,
+              19.79369433629445
+            ],
+            [
+              73.82666546684177,
+              19.790013480792272
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-104",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Gondedumala",
+        "owner_reference": "DEMO-OWNER-104",
+        "land_use": "Residential fringe",
+        "total_area_sqm": 543965.5,
+        "total_area_ha": 54.3965,
+        "affected_area_sqm": 57070.75,
+        "affected_area_ha": 5.7071,
+        "affected_percentage": 10.49,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-104"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.84301538843842,
+              19.791689716417185
+            ],
+            [
+              73.84137913987198,
+              19.79771965381934
+            ],
+            [
+              73.8455152964901,
+              19.799412158158734
+            ],
+            [
+              73.84905720065893,
+              19.80081549393468
+            ],
+            [
+              73.85226973012253,
+              19.79619112565308
+            ],
+            [
+              73.84301538843842,
+              19.791689716417185
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-105",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Bharvir Khurd",
+        "owner_reference": "DEMO-OWNER-105",
+        "land_use": "Agricultural",
+        "total_area_sqm": 630787.36,
+        "total_area_ha": 63.0787,
+        "affected_area_sqm": 29774.23,
+        "affected_area_ha": 2.9774,
+        "affected_percentage": 4.72,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-105"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.85391511037801,
+              19.80340361298498
+            ],
+            [
+              73.85219396391618,
+              19.810031325308014
+            ],
+            [
+              73.85671912083846,
+              19.812073025990124
+            ],
+            [
+              73.86047650272012,
+              19.813749791627718
+            ],
+            [
+              73.86422970621447,
+              19.808123694077736
+            ],
+            [
+              73.85391511037801,
+              19.80340361298498
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-106",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Bharvir Budruk",
+        "owner_reference": "DEMO-OWNER-106",
+        "land_use": "Orchard",
+        "total_area_sqm": 794861.93,
+        "total_area_ha": 79.4862,
+        "affected_area_sqm": 55936.57,
+        "affected_area_ha": 5.5937,
+        "affected_percentage": 7.04,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-106"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.87365494668778,
+              19.80521995929014
+            ],
+            [
+              73.8711424772753,
+              19.81179058321499
+            ],
+            [
+              73.87386307877692,
+              19.81300528328349
+            ],
+            [
+              73.87564513714575,
+              19.813774123845892
+            ],
+            [
+              73.87936532282136,
+              19.807544232920446
+            ],
+            [
+              73.87365494668778,
+              19.80521995929014
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-107",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Shivajinagar",
+        "owner_reference": "DEMO-OWNER-107",
+        "land_use": "Agricultural",
+        "total_area_sqm": 457140.48,
+        "total_area_ha": 45.714,
+        "affected_area_sqm": 18390.8,
+        "affected_area_ha": 1.8391,
+        "affected_percentage": 4.02,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-107"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.88420828656616,
+              19.817713491365833
+            ],
+            [
+              73.88306903781759,
+              19.822005311089207
+            ],
+            [
+              73.88627328885674,
+              19.823396095561254
+            ],
+            [
+              73.88836824217019,
+              19.82426002153337
+            ],
+            [
+              73.8908447697756,
+              19.820508034427945
+            ],
+            [
+              73.88420828656616,
+              19.817713491365833
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-108",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Mundhegaon",
+        "owner_reference": "DEMO-OWNER-108",
+        "land_use": "Residential fringe",
+        "total_area_sqm": 331990.71,
+        "total_area_ha": 33.1991,
+        "affected_area_sqm": 42968.04,
+        "affected_area_ha": 4.2968,
+        "affected_percentage": 12.94,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-108"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.90002196824538,
+              19.82029061194736
+            ],
+            [
+              73.898749122694,
+              19.825142534093075
+            ],
+            [
+              73.90211816203033,
+              19.826504833182334
+            ],
+            [
+              73.90488995635279,
+              19.82758330250853
+            ],
+            [
+              73.90744532667634,
+              19.823817499998665
+            ],
+            [
+              73.90002196824538,
+              19.82029061194736
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-109",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Vihigaon",
+        "owner_reference": "DEMO-OWNER-109",
+        "land_use": "Agricultural",
+        "total_area_sqm": 405783.5,
+        "total_area_ha": 40.5784,
+        "affected_area_sqm": 30390.94,
+        "affected_area_ha": 3.0391,
+        "affected_percentage": 7.49,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-109"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.91168842861414,
+              19.830685976309365
+            ],
+            [
+              73.91038755140922,
+              19.835901453101915
+            ],
+            [
+              73.91421560052825,
+              19.83748647002765
+            ],
+            [
+              73.91727568163179,
+              19.838706612901845
+            ],
+            [
+              73.92011303157028,
+              19.834541773314022
+            ],
+            [
+              73.91168842861414,
+              19.830685976309365
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-110",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Kasarwadi",
+        "owner_reference": "DEMO-OWNER-110",
+        "land_use": "Orchard",
+        "total_area_sqm": 497144.93,
+        "total_area_ha": 49.7145,
+        "affected_area_sqm": 56981.82,
+        "affected_area_ha": 5.6982,
+        "affected_percentage": 11.46,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-110"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.9279735023661,
+              19.832375284139072
+            ],
+            [
+              73.92653708497666,
+              19.838157631298063
+            ],
+            [
+              73.93074760412375,
+              19.840109383405633
+            ],
+            [
+              73.93401943690377,
+              19.84161526540204
+            ],
+            [
+              73.93741051749966,
+              19.83653820159631
+            ],
+            [
+              73.9279735023661,
+              19.832375284139072
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-111",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Wadivarhe",
+        "owner_reference": "DEMO-OWNER-111",
+        "land_use": "Agricultural",
+        "total_area_sqm": 639268.56,
+        "total_area_ha": 63.9269,
+        "affected_area_sqm": 37856.11,
+        "affected_area_ha": 3.7856,
+        "affected_percentage": 5.92,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-111"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.93927329923021,
+              19.843380582848937
+            ],
+            [
+              73.93844671025471,
+              19.849868708332117
+            ],
+            [
+              73.9433842878145,
+              19.851432786184816
+            ],
+            [
+              73.94715765888411,
+              19.85258917762273
+            ],
+            [
+              73.95018990466981,
+              19.84670868874306
+            ],
+            [
+              73.93927329923021,
+              19.843380582848937
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-112",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Gondedumala",
+        "owner_reference": "DEMO-OWNER-112",
+        "land_use": "Residential fringe",
+        "total_area_sqm": 772148.58,
+        "total_area_ha": 77.2149,
+        "affected_area_sqm": 67615.3,
+        "affected_area_ha": 6.7615,
+        "affected_percentage": 8.76,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-112"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.95897709320344,
+              19.84345702200689
+            ],
+            [
+              73.95735396688951,
+              19.8499794186365
+            ],
+            [
+              73.96004484975387,
+              19.850779347950105
+            ],
+            [
+              73.96210880787592,
+              19.851359836668284
+            ],
+            [
+              73.96479854650381,
+              19.845494325391375
+            ],
+            [
+              73.95897709320344,
+              19.84345702200689
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-113",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Bharvir Khurd",
+        "owner_reference": "DEMO-OWNER-113",
+        "land_use": "Agricultural",
+        "total_area_sqm": 422846.72,
+        "total_area_ha": 42.2847,
+        "affected_area_sqm": 16919.18,
+        "affected_area_ha": 1.6919,
+        "affected_percentage": 4,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-113"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.97104753337598,
+              19.85446234825915
+            ],
+            [
+              73.96942588287915,
+              19.861598833089353
+            ],
+            [
+              73.9726590130606,
+              19.862410219299928
+            ],
+            [
+              73.97508297135685,
+              19.86294742234793
+            ],
+            [
+              73.97794400554106,
+              19.856609419630004
+            ],
+            [
+              73.97104753337598,
+              19.85446234825915
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-114",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Bharvir Budruk",
+        "owner_reference": "DEMO-OWNER-114",
+        "land_use": "Orchard",
+        "total_area_sqm": 536809.96,
+        "total_area_ha": 53.681,
+        "affected_area_sqm": 42640.19,
+        "affected_area_ha": 4.264,
+        "affected_percentage": 7.94,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-114"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.98692125077494,
+              19.85514128570438
+            ],
+            [
+              73.98656703075936,
+              19.859838613317347
+            ],
+            [
+              73.99031375493895,
+              19.860706289878262
+            ],
+            [
+              73.99305914905737,
+              19.861273467180865
+            ],
+            [
+              73.99491192463245,
+              19.857305580309113
+            ],
+            [
+              73.98692125077494,
+              19.85514128570438
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-115",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Shivajinagar",
+        "owner_reference": "DEMO-OWNER-115",
+        "land_use": "Agricultural",
+        "total_area_sqm": 388094.03,
+        "total_area_ha": 38.8094,
+        "affected_area_sqm": 30510.76,
+        "affected_area_ha": 3.0511,
+        "affected_percentage": 7.86,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-115"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.00023344723724,
+              19.863495444158193
+            ],
+            [
+              73.99990941044268,
+              19.868564227785743
+            ],
+            [
+              74.0040699411451,
+              19.86981215909952
+            ],
+            [
+              74.00704699363192,
+              19.87070504098449
+            ],
+            [
+              74.00927314565146,
+              19.865819324647326
+            ],
+            [
+              74.00023344723724,
+              19.863495444158193
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-116",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Mundhegaon",
+        "owner_reference": "DEMO-OWNER-116",
+        "land_use": "Residential fringe",
+        "total_area_sqm": 499517.03,
+        "total_area_ha": 49.9517,
+        "affected_area_sqm": 52521.85,
+        "affected_area_ha": 5.2522,
+        "affected_percentage": 10.51,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-116"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.01627974467353,
+              19.86284329636291
+            ],
+            [
+              74.01620711537151,
+              19.868497914241882
+            ],
+            [
+              74.02058160613426,
+              19.869494189935384
+            ],
+            [
+              74.0243098030843,
+              19.870328729640168
+            ],
+            [
+              74.0263439336557,
+              19.86536028867118
+            ],
+            [
+              74.01627974467353,
+              19.86284329636291
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-117",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Vihigaon",
+        "owner_reference": "DEMO-OWNER-117",
+        "land_use": "Agricultural",
+        "total_area_sqm": 585993.95,
+        "total_area_ha": 58.5994,
+        "affected_area_sqm": 36063.57,
+        "affected_area_ha": 3.6064,
+        "affected_percentage": 6.15,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-117"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.02973785298266,
+              19.871536108131572
+            ],
+            [
+              74.02965277000705,
+              19.877781543200886
+            ],
+            [
+              74.03455632648338,
+              19.878794537827485
+            ],
+            [
+              74.03862885584287,
+              19.87959965356887
+            ],
+            [
+              74.04085829131625,
+              19.87416409661774
+            ],
+            [
+              74.02973785298266,
+              19.871536108131572
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-118",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Kasarwadi",
+        "owner_reference": "DEMO-OWNER-118",
+        "land_use": "Orchard",
+        "total_area_sqm": 710862.71,
+        "total_area_ha": 71.0863,
+        "affected_area_sqm": 64291.68,
+        "affected_area_ha": 6.4292,
+        "affected_percentage": 9.04,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-118"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.04926492303576,
+              19.870174418942554
+            ],
+            [
+              74.04838791325321,
+              19.876534591160212
+            ],
+            [
+              74.05134827230748,
+              19.87707702146444
+            ],
+            [
+              74.0532928569108,
+              19.877365574883484
+            ],
+            [
+              74.05535294975648,
+              19.871366844567742
+            ],
+            [
+              74.04926492303576,
+              19.870174418942554
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-119",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Wadivarhe",
+        "owner_reference": "DEMO-OWNER-119",
+        "land_use": "Agricultural",
+        "total_area_sqm": 411949.12,
+        "total_area_ha": 41.1949,
+        "affected_area_sqm": 16342.46,
+        "affected_area_ha": 1.6342,
+        "affected_percentage": 3.97,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-119"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.06246049864635,
+              19.879826586394447
+            ],
+            [
+              74.0613871725797,
+              19.886761548760017
+            ],
+            [
+              74.06486751573244,
+              19.88738051737819
+            ],
+            [
+              74.06715552057236,
+              19.88767147271961
+            ],
+            [
+              74.06958233095823,
+              19.88125126211101
+            ],
+            [
+              74.06246049864635,
+              19.879826586394447
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-120",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Gondedumala",
+        "owner_reference": "DEMO-OWNER-120",
+        "land_use": "Residential fringe",
+        "total_area_sqm": 524670.27,
+        "total_area_ha": 52.467,
+        "affected_area_sqm": 44863.74,
+        "affected_area_ha": 4.4864,
+        "affected_percentage": 8.55,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-120"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.07835174475991,
+              19.880169780635573
+            ],
+            [
+              74.07820569293571,
+              19.8845879649646
+            ],
+            [
+              74.08173701322168,
+              19.885494035855093
+            ],
+            [
+              74.08462631631362,
+              19.886223513216258
+            ],
+            [
+              74.08633134561236,
+              19.88236384058591
+            ],
+            [
+              74.07835174475991,
+              19.880169780635573
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-121",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Bharvir Khurd",
+        "owner_reference": "DEMO-OWNER-121",
+        "land_use": "Agricultural",
+        "total_area_sqm": 366064.32,
+        "total_area_ha": 36.6064,
+        "affected_area_sqm": 31918.72,
+        "affected_area_ha": 3.1919,
+        "affected_percentage": 8.72,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-121"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.09195525986705,
+              19.887972383310753
+            ],
+            [
+              74.09172240101505,
+              19.892765600115766
+            ],
+            [
+              74.09571608360285,
+              19.89391561055231
+            ],
+            [
+              74.0988903641796,
+              19.894819614841126
+            ],
+            [
+              74.1009149824633,
+              19.890539836935677
+            ],
+            [
+              74.09195525986705,
+              19.887972383310753
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-122",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Bharvir Budruk",
+        "owner_reference": "DEMO-OWNER-122",
+        "land_use": "Orchard",
+        "total_area_sqm": 454280.48,
+        "total_area_ha": 45.428,
+        "affected_area_sqm": 48338.64,
+        "affected_area_ha": 4.8339,
+        "affected_percentage": 10.64,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-122"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.10815164913639,
+              19.8877329534641
+            ],
+            [
+              74.10788190573572,
+              19.89309789138628
+            ],
+            [
+              74.11239755396493,
+              19.8943051835264
+            ],
+            [
+              74.11591166995011,
+              19.895211891314847
+            ],
+            [
+              74.11815791671674,
+              19.8904667781664
+            ],
+            [
+              74.10815164913639,
+              19.8877329534641
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-123",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Shivajinagar",
+        "owner_reference": "DEMO-OWNER-123",
+        "land_use": "Agricultural",
+        "total_area_sqm": 564338.22,
+        "total_area_ha": 56.4338,
+        "affected_area_sqm": 35224.23,
+        "affected_area_ha": 3.5224,
+        "affected_percentage": 6.24,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-123"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.12126438545867,
+              19.896690934999917
+            ],
+            [
+              74.12095313502938,
+              19.902641283366176
+            ],
+            [
+              74.12599638320997,
+              19.903889880022174
+            ],
+            [
+              74.12985589513306,
+              19.904783322843002
+            ],
+            [
+              74.132325456263,
+              19.8995683203384
+            ],
+            [
+              74.12126438545867,
+              19.896690934999917
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-124",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Mundhegaon",
+        "owner_reference": "DEMO-OWNER-124",
+        "land_use": "Residential fringe",
+        "total_area_sqm": 687823.51,
+        "total_area_ha": 68.7824,
+        "affected_area_sqm": 69921.49,
+        "affected_area_ha": 6.9921,
+        "affected_percentage": 10.17,
+        "is_synthetic": true,
+        "data_note": "Synthetic prototype parcel boundary; not an official cadastral record.",
+        "layer_type": "parcel",
+        "name": "Survey Parcel: SM-NK-124"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.78659152777712,
+              19.77026430947016
+            ],
+            [
+              73.78907706590374,
+              19.771516354791547
+            ],
+            [
+              73.79097284240436,
+              19.772471282652774
+            ],
+            [
+              73.79117095301925,
+              19.772182160467153
+            ],
+            [
+              73.78669715007544,
+              19.769928599697394
+            ],
+            [
+              73.78659152777712,
+              19.77026430947016
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-101",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Vihigaon",
+        "total_area_sqm": 263250,
+        "affected_area_sqm": 19968.58,
+        "affected_area_ha": 1.9969,
+        "affected_percentage": 7.59,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-101"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.79935044827616,
+              19.776915979397028
+            ],
+            [
+              73.80563925088576,
+              19.780083056618018
+            ],
+            [
+              73.80592537923178,
+              19.77966861897817
+            ],
+            [
+              73.79946497738572,
+              19.77654382044797
+            ],
+            [
+              73.79935044827616,
+              19.776915979397028
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-102",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Kasarwadi",
+        "total_area_sqm": 348347.37,
+        "affected_area_sqm": 36380.35,
+        "affected_area_ha": 3.638,
+        "affected_percentage": 10.44,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-102"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.81385000995186,
+              19.784217531593853
+            ],
+            [
+              73.81432251649137,
+              19.7844554416269
+            ],
+            [
+              73.81732614340403,
+              19.785796019416377
+            ],
+            [
+              73.81988255074573,
+              19.786883941165005
+            ],
+            [
+              73.8200240420584,
+              19.78668018884798
+            ],
+            [
+              73.8181327046209,
+              19.78575980094304
+            ],
+            [
+              73.81401142051469,
+              19.783684771480846
+            ],
+            [
+              73.81385000995186,
+              19.784217531593853
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-103",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Wadivarhe",
+        "total_area_sqm": 446286.19,
+        "affected_area_sqm": 31866.37,
+        "affected_area_ha": 3.1866,
+        "affected_percentage": 7.14,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-103"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.82654289809582,
+              19.790461795323477
+            ],
+            [
+              73.83468986902142,
+              19.79442558192052
+            ],
+            [
+              73.83500014409175,
+              19.79396700111021
+            ],
+            [
+              73.82853060108943,
+              19.79081939363518
+            ],
+            [
+              73.82666546684177,
+              19.790013480792272
+            ],
+            [
+              73.82654289809582,
+              19.790461795323477
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-104",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Gondedumala",
+        "total_area_sqm": 543965.5,
+        "affected_area_sqm": 57070.75,
+        "affected_area_ha": 5.7071,
+        "affected_percentage": 10.49,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-104"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.84138871039413,
+              19.79768438585269
+            ],
+            [
+              73.841896072217,
+              19.797931188234525
+            ],
+            [
+              73.8455152964901,
+              19.799412158158734
+            ],
+            [
+              73.84905720065893,
+              19.80081549393468
+            ],
+            [
+              73.84906268655345,
+              19.80080759739751
+            ],
+            [
+              73.84153482466189,
+              19.797145943506884
+            ],
+            [
+              73.84138871039413,
+              19.79768438585269
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-105",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Bharvir Khurd",
+        "total_area_sqm": 630787.36,
+        "affected_area_sqm": 29774.23,
+        "affected_area_ha": 2.9774,
+        "affected_percentage": 4.72,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-105"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.85382899271436,
+              19.803735245997636
+            ],
+            [
+              73.85487030531272,
+              19.80424167376185
+            ],
+            [
+              73.86394356838457,
+              19.80855263579654
+            ],
+            [
+              73.86422970621447,
+              19.808123694077736
+            ],
+            [
+              73.85391511037801,
+              19.80340361298498
+            ],
+            [
+              73.85382899271436,
+              19.803735245997636
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-106",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Bharvir Budruk",
+        "total_area_sqm": 794861.93,
+        "affected_area_sqm": 55936.57,
+        "affected_area_ha": 5.5937,
+        "affected_percentage": 7.04,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-106"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.8711424772753,
+              19.81179058321499
+            ],
+            [
+              73.87386307877692,
+              19.81300528328349
+            ],
+            [
+              73.87564513714575,
+              19.813774123845892
+            ],
+            [
+              73.87577042738417,
+              19.81356432022502
+            ],
+            [
+              73.87127988361154,
+              19.81143125352041
+            ],
+            [
+              73.8711424772753,
+              19.81179058321499
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-107",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Shivajinagar",
+        "total_area_sqm": 457140.48,
+        "affected_area_sqm": 18390.8,
+        "affected_area_ha": 1.8391,
+        "affected_percentage": 4.02,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-107"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.8840986695691,
+              19.818126456050518
+            ],
+            [
+              73.89043162973844,
+              19.821133964984682
+            ],
+            [
+              73.8907364367213,
+              19.82067216573885
+            ],
+            [
+              73.88683842763662,
+              19.818821052561393
+            ],
+            [
+              73.88420828656616,
+              19.817713491365833
+            ],
+            [
+              73.8840986695691,
+              19.818126456050518
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-108",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Mundhegaon",
+        "total_area_sqm": 331990.71,
+        "affected_area_sqm": 42968.04,
+        "affected_area_ha": 4.2968,
+        "affected_percentage": 12.94,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-108"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.89876261286679,
+              19.825091113076184
+            ],
+            [
+              73.89956637352475,
+              19.8254730041135
+            ],
+            [
+              73.90211816203033,
+              19.826504833182334
+            ],
+            [
+              73.90488995635279,
+              19.82758330250853
+            ],
+            [
+              73.90498624669985,
+              19.82744140527189
+            ],
+            [
+              73.89890411760292,
+              19.824551731676248
+            ],
+            [
+              73.89876261286679,
+              19.825091113076184
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-109",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Vihigaon",
+        "total_area_sqm": 405783.5,
+        "affected_area_sqm": 30390.94,
+        "affected_area_ha": 3.0391,
+        "affected_percentage": 7.49,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-109"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.9115666867023,
+              19.831174080555748
+            ],
+            [
+              73.91975698241392,
+              19.835064419666587
+            ],
+            [
+              73.92006919225216,
+              19.834606125504873
+            ],
+            [
+              73.91519254488382,
+              19.832289820224332
+            ],
+            [
+              73.91168842861414,
+              19.830685976309365
+            ],
+            [
+              73.9115666867023,
+              19.831174080555748
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-110",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Kasarwadi",
+        "total_area_sqm": 497144.93,
+        "affected_area_sqm": 56981.82,
+        "affected_area_ha": 5.6982,
+        "affected_percentage": 11.46,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-110"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.92653708497666,
+              19.838157631298063
+            ],
+            [
+              73.93074760412375,
+              19.840109383405633
+            ],
+            [
+              73.93401943690377,
+              19.84161526540204
+            ],
+            [
+              73.93421424418038,
+              19.841323614546283
+            ],
+            [
+              73.92664367738405,
+              19.837728556418572
+            ],
+            [
+              73.92653708497666,
+              19.838157631298063
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-111",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Wadivarhe",
+        "total_area_sqm": 639268.56,
+        "affected_area_sqm": 37856.11,
+        "affected_area_ha": 3.7856,
+        "affected_percentage": 5.92,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-111"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.93922395219315,
+              19.843767939454406
+            ],
+            [
+              73.94979761291786,
+              19.847469496214398
+            ],
+            [
+              73.95005009397548,
+              19.84697983746886
+            ],
+            [
+              73.94310923993469,
+              19.84455012297767
+            ],
+            [
+              73.93927329923021,
+              19.843380582848937
+            ],
+            [
+              73.93922395219315,
+              19.843767939454406
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-112",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Gondedumala",
+        "total_area_sqm": 772148.58,
+        "affected_area_sqm": 67615.3,
+        "affected_area_ha": 6.7615,
+        "affected_percentage": 8.76,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-112"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.95735396688951,
+              19.8499794186365
+            ],
+            [
+              73.96004484975387,
+              19.850779347950105
+            ],
+            [
+              73.96210880787592,
+              19.851359836668284
+            ],
+            [
+              73.96217185098772,
+              19.851222364357046
+            ],
+            [
+              73.95745541654165,
+              19.849571769592615
+            ],
+            [
+              73.95735396688951,
+              19.8499794186365
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-113",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Bharvir Khurd",
+        "total_area_sqm": 422846.72,
+        "affected_area_sqm": 16919.18,
+        "affected_area_ha": 1.6919,
+        "affected_percentage": 4,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-113"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.9709541192653,
+              19.854873460642146
+            ],
+            [
+              73.97490695557252,
+              19.856256451802615
+            ],
+            [
+              73.97772197287203,
+              19.857101306002104
+            ],
+            [
+              73.97794400554106,
+              19.856609419630004
+            ],
+            [
+              73.97702985654335,
+              19.856324837021543
+            ],
+            [
+              73.97509304411037,
+              19.855743548128302
+            ],
+            [
+              73.97453051899139,
+              19.855546742546856
+            ],
+            [
+              73.97104753337598,
+              19.85446234825915
+            ],
+            [
+              73.9709541192653,
+              19.854873460642146
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-114",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Bharvir Budruk",
+        "total_area_sqm": 536809.96,
+        "affected_area_sqm": 42640.19,
+        "affected_area_ha": 4.264,
+        "affected_percentage": 7.94,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-114"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.98657315414344,
+              19.85975741398738
+            ],
+            [
+              73.98777993439435,
+              19.860119510396913
+            ],
+            [
+              73.99031375493895,
+              19.860706289878262
+            ],
+            [
+              73.99305914905737,
+              19.861273467180865
+            ],
+            [
+              73.99311598694982,
+              19.861151747110597
+            ],
+            [
+              73.9866150949086,
+              19.859201254160624
+            ],
+            [
+              73.98657315414344,
+              19.85975741398738
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-115",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Shivajinagar",
+        "total_area_sqm": 388094.03,
+        "affected_area_sqm": 30510.76,
+        "affected_area_ha": 3.0511,
+        "affected_percentage": 7.86,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-115"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.00021085476544,
+              19.863848864074022
+            ],
+            [
+              74.00897345222569,
+              19.866477079483996
+            ],
+            [
+              74.00920142844188,
+              19.8659767272117
+            ],
+            [
+              74.00509881539085,
+              19.864746273414596
+            ],
+            [
+              74.00023344723724,
+              19.863495444158193
+            ],
+            [
+              74.00021085476544,
+              19.863848864074022
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-116",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Mundhegaon",
+        "total_area_sqm": 499517.03,
+        "affected_area_sqm": 52521.85,
+        "affected_area_ha": 5.2522,
+        "affected_percentage": 10.51,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-116"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.01620711537151,
+              19.868497914241882
+            ],
+            [
+              74.02058160613426,
+              19.869494189935384
+            ],
+            [
+              74.0243098030843,
+              19.870328729640168
+            ],
+            [
+              74.02441407442595,
+              19.870074051596454
+            ],
+            [
+              74.016213214945,
+              19.8680230706993
+            ],
+            [
+              74.01620711537151,
+              19.868497914241882
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-117",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Vihigaon",
+        "total_area_sqm": 585993.95,
+        "affected_area_sqm": 36063.57,
+        "affected_area_ha": 3.6064,
+        "affected_percentage": 6.15,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-117"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.02973201666127,
+              19.871964560419173
+            ],
+            [
+              74.04064178159031,
+              19.874691984775527
+            ],
+            [
+              74.04085038191474,
+              19.874183381177296
+            ],
+            [
+              74.0393037975785,
+              19.873796784260495
+            ],
+            [
+              74.02973785298266,
+              19.871536108131572
+            ],
+            [
+              74.02973201666127,
+              19.871964560419173
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-118",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Kasarwadi",
+        "total_area_sqm": 710862.71,
+        "affected_area_sqm": 64291.68,
+        "affected_area_ha": 6.4292,
+        "affected_percentage": 9.04,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-118"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.04838791325321,
+              19.876534591160212
+            ],
+            [
+              74.05134827230748,
+              19.87707702146444
+            ],
+            [
+              74.0532928569108,
+              19.877365574883484
+            ],
+            [
+              74.05331579502891,
+              19.877298784800505
+            ],
+            [
+              74.04845020356647,
+              19.876082874768336
+            ],
+            [
+              74.04838791325321,
+              19.876534591160212
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-119",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Wadivarhe",
+        "total_area_sqm": 411949.12,
+        "affected_area_sqm": 16342.46,
+        "affected_area_ha": 1.6342,
+        "affected_percentage": 3.97,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-119"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.06238506876467,
+              19.88031397615408
+            ],
+            [
+              74.06922543392098,
+              19.882195482526154
+            ],
+            [
+              74.06941874363356,
+              19.88168405656021
+            ],
+            [
+              74.06321312954495,
+              19.879977159804174
+            ],
+            [
+              74.06246049864635,
+              19.879826586394447
+            ],
+            [
+              74.06238506876467,
+              19.88031397615408
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-120",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Gondedumala",
+        "total_area_sqm": 524670.27,
+        "affected_area_sqm": 44863.74,
+        "affected_area_ha": 4.4864,
+        "affected_percentage": 8.55,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-120"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.07820569293571,
+              19.8845879649646
+            ],
+            [
+              74.08173701322168,
+              19.885494035855093
+            ],
+            [
+              74.08462631631362,
+              19.886223513216258
+            ],
+            [
+              74.08476716981953,
+              19.885904671499546
+            ],
+            [
+              74.07822166127026,
+              19.884104930164725
+            ],
+            [
+              74.07820569293571,
+              19.8845879649646
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-121",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Bharvir Khurd",
+        "total_area_sqm": 366064.32,
+        "affected_area_sqm": 31918.72,
+        "affected_area_ha": 3.1919,
+        "affected_percentage": 8.72,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-121"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.09193258643668,
+              19.888439116619857
+            ],
+            [
+              74.09491667635955,
+              19.889259382702818
+            ],
+            [
+              74.10069969063036,
+              19.890994948398088
+            ],
+            [
+              74.1009149824633,
+              19.890539836935677
+            ],
+            [
+              74.09195525986705,
+              19.887972383310753
+            ],
+            [
+              74.09193258643668,
+              19.888439116619857
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-122",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Bharvir Budruk",
+        "total_area_sqm": 454280.48,
+        "affected_area_sqm": 48338.64,
+        "affected_area_ha": 4.8339,
+        "affected_percentage": 10.64,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-122"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.10788190573572,
+              19.89309789138628
+            ],
+            [
+              74.11239755396493,
+              19.8943051835264
+            ],
+            [
+              74.11591166995011,
+              19.895211891314847
+            ],
+            [
+              74.11600346206099,
+              19.895017990324053
+            ],
+            [
+              74.10790749183361,
+              19.892589030724903
+            ],
+            [
+              74.10788190573572,
+              19.89309789138628
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-123",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Shivajinagar",
+        "total_area_sqm": 564338.22,
+        "affected_area_sqm": 35224.23,
+        "affected_area_ha": 3.5224,
+        "affected_percentage": 6.24,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-123"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.12123997752099,
+              19.897157577943705
+            ],
+            [
+              74.13194645534108,
+              19.9003686870289
+            ],
+            [
+              74.13218228733516,
+              19.899870662762805
+            ],
+            [
+              74.12364691716408,
+              19.8973107841161
+            ],
+            [
+              74.12126438545867,
+              19.896690934999917
+            ],
+            [
+              74.12123997752099,
+              19.897157577943705
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "SM-NK-124",
+        "project_code": "SM-NASHIK-DEMO-01",
+        "project_name": "Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo",
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "village": "Mundhegaon",
+        "total_area_sqm": 687823.51,
+        "affected_area_sqm": 69921.49,
+        "affected_area_ha": 6.9921,
+        "affected_percentage": 10.17,
+        "geometry_method": "parcel ∩ acquisition corridor",
+        "is_synthetic": true,
+        "data_note": "Affected geometry is independently derived for this parcel.",
+        "layer_type": "affected_area",
+        "name": "Affected Area — SM-NK-124"
+      }
+    }
+  ]
+}

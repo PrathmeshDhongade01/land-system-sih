@@ -36,6 +36,7 @@ export interface ConflictResultData {
 const DEFAULT_PROJECT_OPTIONS = [
   { code: 'NHAI-DEL-BOM-01', name: 'Delhi–Mumbai Expressway Corridor' },
   { code: 'NHAI-NSK-SURCHE', name: 'Nashik–Surat Economic Highway' },
+  { code: 'SM-NASHIK-DEMO-01', name: 'Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo' },
   { code: 'NH-334B', name: 'Rampur–Baghpat Expressway Corridor' },
   { code: 'NH-709A', name: 'Kishanganj Bypass Realignment' },
   { code: 'EW-14', name: 'Eastern Freight & Logistics Spur' },
