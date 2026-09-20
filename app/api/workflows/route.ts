@@ -213,11 +213,46 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const project_code = searchParams.get('project_code')
     const status = searchParams.get('status')
+    const land_parcel_id = searchParams.get('land_parcel_id')
 
     let query = authRes.supabase
       .from('statutory_workflows')
       .select('*')
       .order('created_at', { ascending: false })
+
+    // Viewer role scoping: A Viewer may ONLY view statutory workflows for parcels they own
+    if (authRes.profile.role === 'Viewer') {
+      const { data: ownedParcels, error: pErr } = await authRes.supabase
+        .from('land_parcels')
+        .select('id')
+        .eq('owner_profile_id', authRes.user.id)
+
+      if (pErr) {
+        console.error('Error fetching viewer owned parcels in GET /api/workflows:', pErr)
+        return NextResponse.json({ success: true, data: [] }, { status: 200 })
+      }
+
+      const ownedParcelIds = (ownedParcels || []).map((p: any) => p.id).filter(Boolean) as string[]
+
+      if (land_parcel_id && land_parcel_id.trim()) {
+        const reqPid = land_parcel_id.trim()
+        if (!ownedParcelIds.includes(reqPid)) {
+          return NextResponse.json(
+            { success: false, error: 'Access denied. You do not own this parcel.' },
+            { status: 403 }
+          )
+        }
+      } else {
+        if (ownedParcelIds.length === 0) {
+          return NextResponse.json({ success: true, data: [] }, { status: 200 })
+        }
+        query = query.in('land_parcel_id', ownedParcelIds)
+      }
+    }
+
+    if (land_parcel_id && land_parcel_id.trim()) {
+      query = query.eq('land_parcel_id', land_parcel_id.trim())
+    }
 
     if (project_code && project_code.trim()) {
       query = query.eq('project_code', project_code.trim())

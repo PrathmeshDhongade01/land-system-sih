@@ -55,12 +55,74 @@ export async function GET(request: Request) {
       )
     }
 
+    const userRole = authRes.profile.role
+
     let query = authRes.supabase
       .from('land_parcels')
       .select(
-        'id, project_id, project_code, parcel_number, parcel_no, owner_name, village_name, survey_number, survey_no, khasra_no, notified_area_sqm, affected_area_sqm, possession_status, land_type, field_verification_status, field_verified_at, field_verified_by, field_remarks, latitude, longitude, compensation_assessed, compensation_approved, compensation_paid, payment_status, rehabilitation_status, created_at, updated_at'
+        'id, project_id, project_code, parcel_number, parcel_no, owner_name, village_name, taluka_name, district, state, survey_number, survey_no, khasra_no, notified_area_sqm, affected_area_sqm, possession_status, land_type, field_verification_status, field_verified_at, field_verified_by, field_remarks, latitude, longitude, compensation_assessed, compensation_approved, compensation_paid, payment_status, payment_reference, payment_released_at, rehabilitation_status, rehabilitation_amount, rehabilitation_remarks, rehabilitation_completed_at, owner_profile_id, created_at, updated_at'
       )
       .order('created_at', { ascending: false })
+
+    // Server-side role scoping
+    if (userRole === 'Viewer') {
+      // Direct ID access check for Viewer
+      if (id && id.trim()) {
+        const reqId = id.trim()
+        const { data: ownedParcel, error: checkErr } = await authRes.supabase
+          .from('land_parcels')
+          .select('id')
+          .eq('id', reqId)
+          .eq('owner_profile_id', authRes.user.id)
+          .maybeSingle()
+
+        if (checkErr || !ownedParcel) {
+          return NextResponse.json(
+            { success: false, error: 'Access denied or parcel not found.' },
+            { status: 403 }
+          )
+        }
+      }
+
+      query = query.eq('owner_profile_id', authRes.user.id)
+    } else if (userRole === 'Field Officer') {
+      const dbClient = createServiceRoleClient() || authRes.supabase
+      const { data: assignments, error: assignErr } = await dbClient
+        .from('parcel_assignments')
+        .select('parcel_id')
+        .eq('assigned_officer_id', authRes.user.id)
+        .eq('status', 'Active')
+
+      if (assignErr) {
+        console.error('Error checking officer assignments in GET /api/parcels:', assignErr)
+        return NextResponse.json(
+          { success: false, error: 'Database query failed checking assignments' },
+          { status: 500 }
+        )
+      }
+
+      const assignedParcelIds = Array.from(
+        new Set((assignments || []).map((a: any) => a.parcel_id).filter(Boolean))
+      ) as string[]
+
+      // Direct ID access check for Field Officer
+      if (id && id.trim()) {
+        const reqId = id.trim()
+        if (!assignedParcelIds.includes(reqId)) {
+          return NextResponse.json(
+            { success: false, error: 'Access denied. You are not assigned to this parcel.' },
+            { status: 403 }
+          )
+        }
+      }
+
+      if (assignedParcelIds.length === 0) {
+        // Officer has no active assignments; return empty list securely
+        return NextResponse.json({ success: true, data: [] }, { status: 200 })
+      }
+
+      query = query.in('id', assignedParcelIds)
+    }
 
     if (id && id.trim()) {
       query = query.eq('id', id.trim())
@@ -90,6 +152,9 @@ export async function GET(request: Request) {
     const { data, error } = await query
 
     if (error) {
+      if (userRole === 'Viewer' && (error.code === 'PGRST204' || (error.message && error.message.includes('owner_profile_id')))) {
+        return NextResponse.json({ success: true, data: [] }, { status: 200 })
+      }
       console.error('Error fetching land_parcels in GET /api/parcels:', error)
       return NextResponse.json(
         { success: false, error: `Database query failed: ${error.message}` },
@@ -217,6 +282,33 @@ export async function PATCH(request: Request) {
         { success: false, error: 'Land parcel not found.' },
         { status: 404 }
       )
+    }
+
+    // 1b. For Field Officer: Verify active assignment before allowing update
+    if (authRes.profile.role === 'Field Officer') {
+      const dbClient = createServiceRoleClient() || authRes.supabase
+      const { data: activeAssignment, error: assignCheckErr } = await dbClient
+        .from('parcel_assignments')
+        .select('id')
+        .eq('parcel_id', trimmedId)
+        .eq('assigned_officer_id', authRes.user.id)
+        .eq('status', 'Active')
+        .maybeSingle()
+
+      if (assignCheckErr) {
+        console.error('Error verifying officer assignment in PATCH /api/parcels:', assignCheckErr)
+        return NextResponse.json(
+          { success: false, error: 'Database error verifying assignment permissions.' },
+          { status: 500 }
+        )
+      }
+
+      if (!activeAssignment) {
+        return NextResponse.json(
+          { success: false, error: 'Access denied. You can only update parcels actively assigned to you.' },
+          { status: 403 }
+        )
+      }
     }
 
     // 2. Construct Safe Server-Calculated Update Payload

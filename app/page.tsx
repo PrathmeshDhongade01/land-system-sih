@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useEffect, useState, useCallback } from 'react'
 import dynamic from 'next/dynamic'
@@ -401,10 +401,19 @@ export default function Page() {
       if (data?.user) {
         setUserEmail(data.user.email ?? null)
         browserClient.from('profiles').select('role').eq('id', data.user.id).maybeSingle()
-          .then((profRes: any) => { if (profRes?.data?.role) setUserRole(profRes.data.role) })
+          .then((profRes: any) => {
+            const role = profRes?.data?.role
+            if (role) {
+              setUserRole(role)
+              if (role === 'MoRTH Nodal Officer') router.replace('/central')
+              else if (role === 'SLAO' || role === 'CALA') router.replace('/state')
+              else if (role === 'Field Officer') router.replace('/field')
+              else if (role === 'Viewer') router.replace('/viewer')
+            }
+          })
       }
     })
-  }, [])
+  }, [router])
 
   const handleSignOut = async () => {
     const browserClient = createBrowserClient()

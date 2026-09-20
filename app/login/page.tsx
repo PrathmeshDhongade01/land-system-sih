@@ -1,8 +1,25 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { ShieldCheck, AlertCircle, RefreshCw, LogIn, UserPlus } from 'lucide-react'
+
+function getSafeNextPath(rawNext: string | null | undefined): string {
+  if (!rawNext) return '/'
+  const trimmed = rawNext.trim()
+  if (trimmed.startsWith('/') && !trimmed.startsWith('//') && !trimmed.startsWith('/\\')) {
+    try {
+      const parsed = new URL(trimmed, 'http://localhost')
+      if (parsed.origin === 'http://localhost') {
+        return parsed.pathname + parsed.search + parsed.hash
+      }
+    } catch {
+      return '/'
+    }
+  }
+  return '/'
+}
 
 function ChakraEmblem({ className }: { className?: string }) {
   const spokes = Array.from({ length: 24 })
@@ -41,7 +58,11 @@ function ChakraEmblem({ className }: { className?: string }) {
   )
 }
 
-export default function LoginPage() {
+function LoginForm() {
+  const searchParams = useSearchParams()
+  const nextParam = searchParams.get('next')
+  const targetPath = getSafeNextPath(nextParam)
+
   const [email, setEmail] = useState<string>('a.sharma@morth.gov.in')
   const [password, setPassword] = useState<string>('NLAMS2026Secure!')
   const [loading, setLoading] = useState<boolean>(false)
@@ -73,7 +94,7 @@ export default function LoginPage() {
       }
 
       if (data.session) {
-        window.location.href = '/'
+        window.location.href = targetPath
       }
     } else {
       const { data, error } = await supabase.auth.signUp({
@@ -88,7 +109,7 @@ export default function LoginPage() {
       }
 
       if (data.session) {
-        window.location.href = '/'
+        window.location.href = targetPath
       } else {
         setErrorMsg('Account created! Please sign in with your email and password.')
         setMode('signin')
@@ -96,6 +117,7 @@ export default function LoginPage() {
       }
     }
   }
+
 
   return (
     <div className="min-h-screen bg-background flex flex-col justify-between">
@@ -225,3 +247,18 @@ export default function LoginPage() {
     </div>
   )
 }
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-background flex items-center justify-center">
+          <RefreshCw className="size-8 animate-spin text-primary" />
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
+  )
+}
+
