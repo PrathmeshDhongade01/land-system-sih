@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, Suspense } from 'react'
+import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { ShieldCheck, AlertCircle, RefreshCw, LogIn, UserPlus } from 'lucide-react'
+import { ShieldCheck, AlertCircle, RefreshCw, LogIn, UserPlus, Shield } from 'lucide-react'
 
 function getSafeNextPath(rawNext: string | null | undefined): string {
   if (!rawNext) return '/'
@@ -236,6 +237,23 @@ function LoginForm() {
               </button>
               <span>v3.2.1 Official</span>
             </div>
+          </div>
+
+          {/* Jury Demo Mode Banner */}
+          <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-center space-y-2 shadow-2xs">
+            <div className="flex items-center justify-center gap-1.5 font-bold text-xs text-amber-800 dark:text-amber-300">
+              <Shield className="size-4 text-amber-600" />
+              <span>Hackathon Jury Demo Mode</span>
+            </div>
+            <p className="text-[11px] text-muted-foreground leading-relaxed">
+              Evaluating NLAMS without login credentials? Explore all 4 role portals directly with synthetic demo data.
+            </p>
+            <Link
+              href="/demo"
+              className="inline-flex items-center gap-1 font-semibold text-primary hover:underline text-xs"
+            >
+              <span>Launch Public Jury Demo &rarr;</span>
+            </Link>
           </div>
         </div>
       </main>
