@@ -1,5 +1,9 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import {
+  ADMIN_DEMO_COOKIE_NAME,
+  isAdminDemoBypassEnabled,
+} from '@/lib/demo/adminDemoBypass'
 
 const defaultUrl = 'https://udpruwshnzrqlhrslbsf.supabase.co'
 const defaultKey =
@@ -50,6 +54,13 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
+  // Isolated Admin Demo Mode bypass check
+  const isAdminDemoActive =
+    isAdminDemoBypassEnabled() &&
+    request.cookies.get(ADMIN_DEMO_COOKIE_NAME)?.value === 'true'
+
+  const isAuthenticated = Boolean(user) || isAdminDemoActive
+
   const pathname = request.nextUrl.pathname
 
   const isProtectedRoute =
@@ -64,7 +75,7 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith('/projects')
   const isLoginPage = pathname === '/login'
 
-  if (!user && isProtectedRoute) {
+  if (!isAuthenticated && isProtectedRoute) {
     const redirectUrl = request.nextUrl.clone()
     redirectUrl.pathname = '/login'
     const currentPathAndQuery = pathname + request.nextUrl.search
@@ -77,7 +88,7 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(redirectUrl)
   }
 
-  if (user && isLoginPage) {
+  if (isAuthenticated && isLoginPage) {
     const rawNext = request.nextUrl.searchParams.get('next')
     const safeNext = getSafeNextPath(rawNext)
     const redirectUrl = request.nextUrl.clone()

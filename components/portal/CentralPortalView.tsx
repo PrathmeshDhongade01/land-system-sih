@@ -99,10 +99,23 @@ export default function CentralPortalView({ userEmail, userRole }: CentralPortal
     router.refresh()
   }
 
+  // Default Samruddhi Nashik project metadata
+  const defaultSamruddhiProject = {
+    id: '01843f0d-072e-4e25-a0a7-fcd7ed02ea10',
+    project_code: 'SM-NASHIK-DEMO-01',
+    project_name: 'Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo',
+    state: 'Maharashtra',
+    district: 'Nashik',
+    status: 'Active',
+    total_area_required_ha: 97.48,
+    gis_file_url: '/gis/SM-NASHIK-DEMO-01.geojson',
+  }
+
   // Data States
   const [kpiData, setKpiData] = useState<DashboardKpis | null>(null)
   const [kpiLoading, setKpiLoading] = useState<boolean>(true)
-  const [projectsList, setProjectsList] = useState<any[]>([])
+  const [projectsList, setProjectsList] = useState<any[]>([defaultSamruddhiProject])
+  const [defaultProjectMissingFromDb, setDefaultProjectMissingFromDb] = useState<boolean>(false)
   const [parcels, setParcels] = useState<any[]>([])
   const [workflows, setWorkflows] = useState<any[]>([])
   const [projectStatuses, setProjectStatuses] = useState<ProjectWithStage[]>([])
@@ -166,7 +179,28 @@ export default function CentralPortalView({ userEmail, userRole }: CentralPortal
           fetchRecentProjectStatuses(12, client),
         ])
 
-        if (pRes.data) setProjectsList(pRes.data)
+        if (pRes.data && pRes.data.length > 0) {
+          const hasSamruddhi = pRes.data.some((p: any) => p.project_code === 'SM-NASHIK-DEMO-01')
+          if (hasSamruddhi) {
+            const normalized = pRes.data.map((p: any) =>
+              p.project_code === 'SM-NASHIK-DEMO-01'
+                ? {
+                    ...p,
+                    project_name: p.project_name || defaultSamruddhiProject.project_name,
+                    gis_file_url: p.gis_file_url || defaultSamruddhiProject.gis_file_url,
+                  }
+                : p
+            )
+            setProjectsList(normalized)
+            setDefaultProjectMissingFromDb(false)
+          } else {
+            setProjectsList([defaultSamruddhiProject, ...pRes.data])
+            setDefaultProjectMissingFromDb(true)
+          }
+        } else {
+          setProjectsList([defaultSamruddhiProject])
+          setDefaultProjectMissingFromDb(true)
+        }
         if (parcRes.data) setParcels(parcRes.data)
         if (wfRes.data) setWorkflows(wfRes.data)
         if (stRes.projects) setProjectStatuses(stRes.projects)
@@ -663,14 +697,64 @@ export default function CentralPortalView({ userEmail, userRole }: CentralPortal
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* GIS Map Canvas */}
-            <div className="lg:col-span-2 rounded-xl border border-border overflow-hidden min-h-[420px] relative">
-              <MapComponent
-                conflictLocation={conflictLocation}
-                projectGisUrl={selectedProjectObj?.gis_file_url || null}
-                projectName={selectedProjectObj?.project_name || 'National Corridors'}
-                projectCode={selectedProjectCode !== 'ALL' ? selectedProjectCode : null}
-              />
+            {/* Acquisition Map Card */}
+            <div className="lg:col-span-2 overflow-hidden rounded-xl border border-border bg-card shadow-sm flex flex-col">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-3.5">
+                <div>
+                  <h2 className="font-serif text-base font-semibold text-foreground">Acquisition Map</h2>
+                  <p className="text-xs text-muted-foreground">GIS corridor view &middot; Land parcel overlay</p>
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1.5">
+                      <span className="inline-block size-2.5 rounded-full bg-[#1e3a8a]" />
+                      Corridor
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="inline-block size-2.5 rounded-full bg-emerald-600" />
+                      Acquired
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="inline-block size-2.5 rounded-full bg-amber-500" />
+                      Pending
+                    </span>
+                    {conflictLocation && (
+                      <span className="flex items-center gap-1.5">
+                        <span className="inline-block size-2.5 rounded-full bg-red-500" />
+                        Conflict
+                      </span>
+                    )}
+                  </div>
+                  <Link
+                    href="/field-verification"
+                    className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 text-xs font-medium hover:bg-accent"
+                  >
+                    <Maximize2 className="size-3.5" />
+                    View Full Map
+                  </Link>
+                </div>
+              </div>
+              <div className="flex-1 min-h-[420px] relative">
+                <MapComponent
+                  conflictLocation={conflictLocation}
+                  projectGisUrl={
+                    selectedProjectCode !== 'ALL'
+                      ? selectedProjectObj?.gis_file_url ||
+                        (selectedProjectCode === 'SM-NASHIK-DEMO-01' ? defaultSamruddhiProject.gis_file_url : null)
+                      : null
+                  }
+                  projectName={
+                    selectedProjectCode !== 'ALL'
+                      ? selectedProjectObj?.project_name ||
+                        (selectedProjectCode === 'SM-NASHIK-DEMO-01' ? defaultSamruddhiProject.project_name : null)
+                      : null
+                  }
+                  projectCode={selectedProjectCode}
+                  parcels={parcels}
+                  isNationalView={selectedProjectCode === 'ALL'}
+                  defaultProjectMissingFromDb={defaultProjectMissingFromDb}
+                />
+              </div>
             </div>
 
             {/* Embedded Conflict Detection Engine */}

@@ -9,6 +9,7 @@ import {
   type DashboardKpis,
   type ProjectWithStage,
 } from '@/lib/supabase'
+import { DEMO_PARCELS } from '@/lib/demoData'
 import ProgressChart from '@/components/ProgressChart'
 import RouteMap from '@/components/RouteMap'
 import ParcelContextHub from '@/components/ParcelContextHub'
@@ -379,7 +380,19 @@ function LandRecordsTable({ parcels, totalCount, searchQuery, setSearchQuery, po
   )
 }
 
+const DEFAULT_SAMRUDDHI_PROJECT = {
+  id: '01843f0d-072e-4e25-a0a7-fcd7ed02ea10',
+  project_code: 'SM-NASHIK-DEMO-01',
+  project_name: 'Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo',
+  state: 'Maharashtra',
+  district: 'Nashik',
+  status: 'Active',
+  total_area_required_ha: 97.48,
+  gis_file_url: '/gis/SM-NASHIK-DEMO-01.geojson',
+}
+
 const DEFAULT_FALLBACK_PARCELS = [
+  ...DEMO_PARCELS,
   { id: 1, owner_name: 'Rajesh Kumar', village_name: 'Rampur', notified_area_sqm: 1250, possession_status: 'Possessed' },
   { id: 2, owner_name: 'Suresh Patel', village_name: 'Kishanganj', notified_area_sqm: 3400, possession_status: 'Pending' },
   { id: 3, owner_name: 'Anita Devi', village_name: 'Devnagar', notified_area_sqm: 2100, possession_status: 'Completed' },
@@ -392,7 +405,7 @@ export default function Page() {
   const router = useRouter()
   const [userEmail, setUserEmail] = useState<string | null>(null)
   const [userRole, setUserRole] = useState<string | null>(null)
-  const [projectData, setProjectData] = useState<any>(null)
+  const [projectData, setProjectData] = useState<any>(DEFAULT_SAMRUDDHI_PROJECT)
 
   useEffect(() => {
     const browserClient = createBrowserClient()
@@ -422,8 +435,8 @@ export default function Page() {
     router.refresh()
   }
 
-  const [parcels, setParcels] = useState<any[]>([])
-  const [filteredParcels, setFilteredParcels] = useState<any[]>([])
+  const [parcels, setParcels] = useState<any[]>(DEMO_PARCELS)
+  const [filteredParcels, setFilteredParcels] = useState<any[]>(DEMO_PARCELS)
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [possessionFilter, setPossessionFilter] = useState<string>('All')
   const [selectedParcel, setSelectedParcel] = useState<any | null>(null)
@@ -443,8 +456,9 @@ export default function Page() {
   const [projectStatusTotal, setProjectStatusTotal] = useState<number>(0)
   const [projectStatusLoading, setProjectStatusLoading] = useState<boolean>(true)
   const [projectStatusError, setProjectStatusError] = useState<string | null>(null)
-  const [selectedProjectCode, setSelectedProjectCode] = useState<string>('ALL')
-  const [projectsList, setProjectsList] = useState<any[]>([])
+  const [selectedProjectCode, setSelectedProjectCode] = useState<string>('SM-NASHIK-DEMO-01')
+  const [projectsList, setProjectsList] = useState<any[]>([DEFAULT_SAMRUDDHI_PROJECT])
+  const [defaultProjectMissingFromDb, setDefaultProjectMissingFromDb] = useState<boolean>(false)
   const [topAlerts, setTopAlerts] = useState<any[]>([])
   const [topAlertsLoading, setTopAlertsLoading] = useState<boolean>(false)
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false)
@@ -496,14 +510,50 @@ export default function Page() {
       try {
         const client = createBrowserClient()
         const { data: pList } = await client.from('projects').select('id, project_code, project_name, state, district, status, total_area_required_ha, gis_file_url').order('created_at', { ascending: false })
-        if (pList && pList.length > 0) setProjectsList(pList)
-        let { data: project } = await client.from('projects').select('*').eq('project_code', 'NHAI-DEL-BOM-01').maybeSingle()
-        if (!project) { const { data: alt } = await client.from('projects').select('*').eq('project_code', 'NHAI-NSK-SURCHE').maybeSingle(); project = alt }
+        if (pList && pList.length > 0) {
+          const hasSamruddhi = pList.some((p: any) => p.project_code === 'SM-NASHIK-DEMO-01')
+          if (hasSamruddhi) {
+            const normalized = pList.map((p: any) =>
+              p.project_code === 'SM-NASHIK-DEMO-01'
+                ? {
+                    ...p,
+                    project_name: p.project_name || DEFAULT_SAMRUDDHI_PROJECT.project_name,
+                    gis_file_url: p.gis_file_url || DEFAULT_SAMRUDDHI_PROJECT.gis_file_url,
+                  }
+                : p
+            )
+            setProjectsList(normalized)
+            setDefaultProjectMissingFromDb(false)
+          } else {
+            setProjectsList([DEFAULT_SAMRUDDHI_PROJECT, ...pList])
+            setDefaultProjectMissingFromDb(true)
+          }
+        } else {
+          setProjectsList([DEFAULT_SAMRUDDHI_PROJECT])
+          setDefaultProjectMissingFromDb(true)
+        }
+
+        let { data: project } = await client.from('projects').select('*').eq('project_code', 'SM-NASHIK-DEMO-01').maybeSingle()
+        if (!project) {
+          const { data: alt } = await client.from('projects').select('*').eq('project_code', 'NHAI-DEL-BOM-01').maybeSingle()
+          project = alt || DEFAULT_SAMRUDDHI_PROJECT
+        }
         if (project) setProjectData(project)
+
         const { data: allParcels } = await client.from('land_parcels').select('*')
-        if (allParcels && allParcels.length > 0) { setParcels(allParcels); setFilteredParcels(allParcels); return }
+        if (allParcels && allParcels.length > 0) {
+          const hasSamruddhiParcels = allParcels.some((p: any) => p.project_code === 'SM-NASHIK-DEMO-01')
+          const mergedParcels = hasSamruddhiParcels ? allParcels : [...DEMO_PARCELS, ...allParcels]
+          setParcels(mergedParcels)
+          setFilteredParcels(mergedParcels)
+          return
+        }
         setParcels(DEFAULT_FALLBACK_PARCELS); setFilteredParcels(DEFAULT_FALLBACK_PARCELS)
-      } catch { setParcels(DEFAULT_FALLBACK_PARCELS); setFilteredParcels(DEFAULT_FALLBACK_PARCELS) }
+      } catch {
+        setProjectsList([DEFAULT_SAMRUDDHI_PROJECT])
+        setDefaultProjectMissingFromDb(true)
+        setParcels(DEFAULT_FALLBACK_PARCELS); setFilteredParcels(DEFAULT_FALLBACK_PARCELS)
+      }
     }
     fetchData()
     async function fetchTopAlerts() {
@@ -514,7 +564,7 @@ export default function Page() {
     fetchTopAlerts()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const selectedProjectObj = projectsList.find(p => p.project_code === selectedProjectCode)
+  const selectedProjectObj = projectsList.find(p => p.project_code === selectedProjectCode) || (selectedProjectCode === 'SM-NASHIK-DEMO-01' ? DEFAULT_SAMRUDDHI_PROJECT : undefined)
 
   useEffect(() => {
     let result = parcels
@@ -568,11 +618,11 @@ export default function Page() {
             <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
               <div className="lg:col-span-2 flex flex-col">
                 <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm flex flex-col flex-1">
-                  <div className="flex items-center justify-between border-b border-border px-5 py-3.5">
+                  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-3.5">
                     <div><h2 className="font-serif text-base font-semibold text-foreground">Acquisition Map</h2><p className="text-xs text-muted-foreground">GIS corridor view &middot; Land parcel overlay</p></div>
-                    <div className="flex items-center gap-3">
-                      <div className="hidden sm:flex items-center gap-3 text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-full bg-primary" />Corridor</span>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                        <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-full bg-[#1e3a8a]" />Corridor</span>
                         <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-full bg-emerald-600" />Acquired</span>
                         <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-full bg-amber-500" />Pending</span>
                         {conflictLocation && <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-full bg-red-500" />Conflict</span>}
@@ -581,7 +631,15 @@ export default function Page() {
                     </div>
                   </div>
                   <div className="flex-1 min-h-[400px]">
-                    <Map conflictLocation={conflictLocation} projectGisUrl={selectedProjectCode !== 'ALL' ? selectedProjectObj?.gis_file_url : null} projectName={selectedProjectCode !== 'ALL' ? selectedProjectObj?.project_name : null} projectCode={selectedProjectCode !== 'ALL' ? selectedProjectObj?.project_code : null} />
+                    <Map
+                      conflictLocation={conflictLocation}
+                      projectGisUrl={selectedProjectCode !== 'ALL' ? (selectedProjectObj?.gis_file_url || (selectedProjectCode === 'SM-NASHIK-DEMO-01' ? DEFAULT_SAMRUDDHI_PROJECT.gis_file_url : null)) : null}
+                      projectName={selectedProjectCode !== 'ALL' ? (selectedProjectObj?.project_name || (selectedProjectCode === 'SM-NASHIK-DEMO-01' ? DEFAULT_SAMRUDDHI_PROJECT.project_name : null)) : null}
+                      projectCode={selectedProjectCode}
+                      parcels={projectParcels}
+                      isNationalView={selectedProjectCode === 'ALL'}
+                      defaultProjectMissingFromDb={defaultProjectMissingFromDb}
+                    />
                   </div>
                 </div>
               </div>

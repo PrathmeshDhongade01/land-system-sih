@@ -1338,11 +1338,13 @@ export default function ViewerPortalView({
 
                       {/* Map Container */}
                       {selectedParcel.latitude && selectedParcel.longitude ? (
-                        <div className="h-[400px] w-full rounded-lg overflow-hidden border border-border">
+                        <div className="w-full rounded-lg overflow-hidden border border-border">
                           <ParcelMap
                             parcels={mapParcels}
                             selectedParcelId={selectedParcel.id}
                             onSelectParcel={() => {}}
+                            projectCode={selectedParcel.project_code || undefined}
+                            showSummaryPanel={false}
                           />
                         </div>
                       ) : (

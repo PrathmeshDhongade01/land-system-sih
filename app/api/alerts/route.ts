@@ -24,6 +24,9 @@ export async function GET(request: Request) {
     const statusParam = searchParams.get('status')?.toUpperCase()
     const eventTypeParam = searchParams.get('event_type')?.toUpperCase()
 
+    const entityIdParam = searchParams.get('entity_id')
+    const entityTypeParam = searchParams.get('entity_type')
+
     // Use session-aware client so PostgreSQL RLS policy "Active users can view relevant alerts"
     // automatically enforces visibility based on caller's role and assigned officer ID.
     let query = authRes.supabase
@@ -33,6 +36,14 @@ export async function GET(request: Request) {
       )
 
     // Optional Filters
+    if (entityIdParam && entityIdParam.trim()) {
+      query = query.eq('entity_id', entityIdParam.trim())
+    }
+
+    if (entityTypeParam && entityTypeParam.trim()) {
+      query = query.eq('entity_type', entityTypeParam.trim())
+    }
+
     if (severityParam && ALLOWED_SEVERITIES.has(severityParam)) {
       query = query.eq('severity', severityParam)
     }

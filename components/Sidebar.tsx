@@ -301,6 +301,11 @@ export default function Sidebar() {
   const [isProfileOpen, setIsProfileOpen] = useState(false)
 
   useEffect(() => {
+    if (pathname === '/login' || pathname.startsWith('/demo')) {
+      setUserRole(null)
+      setUserProfile(null)
+      return
+    }
     const client = createClient()
     client.auth.getUser().then((res: any) => {
       const data = res?.data
@@ -315,9 +320,12 @@ export default function Sidebar() {
             if (prof?.role) setUserRole(prof.role)
             if (prof) setUserProfile(prof)
           })
+      } else {
+        setUserRole(null)
+        setUserProfile(null)
       }
     })
-  }, [])
+  }, [pathname])
 
   const navGroups = getNavGroups(userRole, pathname)
   const isViewer = userRole === 'Viewer'
@@ -337,6 +345,8 @@ export default function Sidebar() {
   const handleSignOut = async () => {
     const client = createClient()
     await client.auth.signOut()
+    setUserRole(null)
+    setUserProfile(null)
     router.push('/login')
     router.refresh()
   }

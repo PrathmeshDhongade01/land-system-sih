@@ -510,9 +510,22 @@ export function FieldVerificationContent() {
       <div className="space-y-2">
         <h2 className="font-serif text-sm font-bold text-foreground flex items-center gap-1.5">
           <MapPin className="size-4 text-emerald-600" />
-          <span>GIS Land Parcel Map ({visibleParcels.filter(p => p.latitude && p.longitude).length} mapped)</span>
+          <span>GIS Land Parcel Intelligence Map ({visibleParcels.length} parcels)</span>
         </h2>
-        <ParcelMap parcels={visibleParcels} selectedParcelId={selectedParcel?.id || null} onSelectParcel={(p) => openVerificationModal(p as LandParcelRecord)} />
+        <ParcelMap
+          parcels={visibleParcels}
+          selectedParcelId={selectedParcel?.id || null}
+          onSelectParcel={(p) => openVerificationModal(p as LandParcelRecord)}
+          onOpen360Hub={(p) => {
+            setHubParcelId(p.id)
+            setIsHubOpen(true)
+          }}
+          projectCode={projectFilter !== 'All' ? projectFilter : 'SM-NASHIK-DEMO-01'}
+          projectName={
+            projects.find((pr) => pr.project_code === projectFilter)?.project_name ||
+            'Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo'
+          }
+        />
       </div>
 
       {errorMsg && (

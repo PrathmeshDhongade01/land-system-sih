@@ -851,8 +851,20 @@ export default function PortalDashboardView({
   const [projectStatusTotal, setProjectStatusTotal] = useState<number>(0)
   const [projectStatusLoading, setProjectStatusLoading] = useState<boolean>(true)
   const [projectStatusError, setProjectStatusError] = useState<string | null>(null)
-  const [selectedProjectCode, setSelectedProjectCode] = useState<string>('ALL')
-  const [projectsList, setProjectsList] = useState<any[]>([])
+  const defaultSamruddhiProject = {
+    id: '01843f0d-072e-4e25-a0a7-fcd7ed02ea10',
+    project_code: 'SM-NASHIK-DEMO-01',
+    project_name: 'Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo',
+    state: 'Maharashtra',
+    district: 'Nashik',
+    status: 'Active',
+    total_area_required_ha: 97.48,
+    gis_file_url: '/gis/SM-NASHIK-DEMO-01.geojson',
+  }
+
+  const [selectedProjectCode, setSelectedProjectCode] = useState<string>('SM-NASHIK-DEMO-01')
+  const [projectsList, setProjectsList] = useState<any[]>([defaultSamruddhiProject])
+  const [defaultProjectMissingFromDb, setDefaultProjectMissingFromDb] = useState<boolean>(false)
   const [topAlerts, setTopAlerts] = useState<any[]>([])
   const [topAlertsLoading, setTopAlertsLoading] = useState<boolean>(false)
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false)
@@ -950,19 +962,40 @@ export default function PortalDashboardView({
           .from('projects')
           .select('id, project_code, project_name, state, district, status, total_area_required_ha, gis_file_url')
           .order('created_at', { ascending: false })
-        if (pList && pList.length > 0) setProjectsList(pList)
+        if (pList && pList.length > 0) {
+          const hasSamruddhi = pList.some((p: any) => p.project_code === 'SM-NASHIK-DEMO-01')
+          if (hasSamruddhi) {
+            const normalized = pList.map((p: any) =>
+              p.project_code === 'SM-NASHIK-DEMO-01'
+                ? {
+                    ...p,
+                    project_name: p.project_name || defaultSamruddhiProject.project_name,
+                    gis_file_url: p.gis_file_url || defaultSamruddhiProject.gis_file_url,
+                  }
+                : p
+            )
+            setProjectsList(normalized)
+            setDefaultProjectMissingFromDb(false)
+          } else {
+            setProjectsList([defaultSamruddhiProject, ...pList])
+            setDefaultProjectMissingFromDb(true)
+          }
+        } else {
+          setProjectsList([defaultSamruddhiProject])
+          setDefaultProjectMissingFromDb(true)
+        }
         let { data: project } = await client
           .from('projects')
           .select('*')
-          .eq('project_code', 'NHAI-DEL-BOM-01')
+          .eq('project_code', 'SM-NASHIK-DEMO-01')
           .maybeSingle()
         if (!project) {
           const { data: alt } = await client
             .from('projects')
             .select('*')
-            .eq('project_code', 'NHAI-NSK-SURCHE')
+            .eq('project_code', 'NHAI-DEL-BOM-01')
             .maybeSingle()
-          project = alt
+          project = alt || defaultSamruddhiProject
         }
         if (project) setProjectData(project)
         const { data: allParcels } = await client.from('land_parcels').select('*')
@@ -974,6 +1007,8 @@ export default function PortalDashboardView({
         setParcels(DEFAULT_FALLBACK_PARCELS)
         setFilteredParcels(DEFAULT_FALLBACK_PARCELS)
       } catch {
+        setProjectsList([defaultSamruddhiProject])
+        setDefaultProjectMissingFromDb(true)
         setParcels(DEFAULT_FALLBACK_PARCELS)
         setFilteredParcels(DEFAULT_FALLBACK_PARCELS)
       }
@@ -991,7 +1026,9 @@ export default function PortalDashboardView({
     fetchTopAlerts()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const selectedProjectObj = projectsList.find((p) => p.project_code === selectedProjectCode)
+  const selectedProjectObj =
+    projectsList.find((p) => p.project_code === selectedProjectCode) ||
+    (selectedProjectCode === 'SM-NASHIK-DEMO-01' ? defaultSamruddhiProject : undefined)
 
   useEffect(() => {
     let result = parcels
@@ -1114,14 +1151,14 @@ export default function PortalDashboardView({
         <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2 flex flex-col">
             <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm flex flex-col flex-1">
-              <div className="flex items-center justify-between border-b border-border px-5 py-3.5">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-3.5">
                 <div>
                   <h2 className="font-serif text-base font-semibold text-foreground">Acquisition Map</h2>
                   <p className="text-xs text-muted-foreground">GIS corridor view &middot; Land parcel overlay</p>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="hidden sm:flex items-center gap-3 text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-full bg-primary" />Corridor</span>
+                <div className="flex flex-wrap items-center gap-3">
+                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-full bg-[#1e3a8a]" />Corridor</span>
                     <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-full bg-emerald-600" />Acquired</span>
                     <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-full bg-amber-500" />Pending</span>
                     {conflictLocation && (
@@ -1142,9 +1179,22 @@ export default function PortalDashboardView({
               <div className="flex-1 min-h-[400px]">
                 <Map
                   conflictLocation={conflictLocation}
-                  projectGisUrl={selectedProjectCode !== 'ALL' ? selectedProjectObj?.gis_file_url : null}
-                  projectName={selectedProjectCode !== 'ALL' ? selectedProjectObj?.project_name : null}
-                  projectCode={selectedProjectCode !== 'ALL' ? selectedProjectObj?.project_code : null}
+                  projectGisUrl={
+                    selectedProjectCode !== 'ALL'
+                      ? selectedProjectObj?.gis_file_url ||
+                        (selectedProjectCode === 'SM-NASHIK-DEMO-01' ? defaultSamruddhiProject.gis_file_url : null)
+                      : null
+                  }
+                  projectName={
+                    selectedProjectCode !== 'ALL'
+                      ? selectedProjectObj?.project_name ||
+                        (selectedProjectCode === 'SM-NASHIK-DEMO-01' ? defaultSamruddhiProject.project_name : null)
+                      : null
+                  }
+                  projectCode={selectedProjectCode}
+                  parcels={projectParcels}
+                  isNationalView={selectedProjectCode === 'ALL'}
+                  defaultProjectMissingFromDb={defaultProjectMissingFromDb}
                 />
               </div>
             </div>

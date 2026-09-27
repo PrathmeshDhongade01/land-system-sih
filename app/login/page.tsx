@@ -4,7 +4,24 @@ import { useState, Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { ShieldCheck, AlertCircle, RefreshCw, LogIn, UserPlus, Shield } from 'lucide-react'
+import {
+  enableAdminDemoClientCookie,
+  isAdminDemoBypassEnabled,
+} from '@/lib/demo/adminDemoBypass'
+import {
+  ShieldCheck,
+  AlertCircle,
+  RefreshCw,
+  LogIn,
+  UserPlus,
+  Shield,
+  Crown,
+  Globe,
+  Building2,
+  Footprints,
+  User,
+  ArrowRight,
+} from 'lucide-react'
 
 function getSafeNextPath(rawNext: string | null | undefined): string {
   if (!rawNext) return '/'
@@ -59,19 +76,116 @@ function ChakraEmblem({ className }: { className?: string }) {
   )
 }
 
+type LoginRoleOption = {
+  id: 'Admin' | 'MoRTH Nodal Officer' | 'SLAO' | 'Field Officer' | 'Viewer'
+  label: string
+  sublabel: string
+  defaultEmail: string
+  icon: React.ElementType
+}
+
+const ROLE_OPTIONS: LoginRoleOption[] = [
+  {
+    id: 'Admin',
+    label: 'Admin',
+    sublabel: 'Master System Console',
+    defaultEmail: 'admin@morth.gov.in',
+    icon: Crown,
+  },
+  {
+    id: 'MoRTH Nodal Officer',
+    label: 'Central Officer',
+    sublabel: 'MoRTH Nodal Officer',
+    defaultEmail: 'a.sharma@morth.gov.in',
+    icon: Globe,
+  },
+  {
+    id: 'SLAO',
+    label: 'State Officer',
+    sublabel: 'SLAO / CALA',
+    defaultEmail: 'slao@morth.gov.in',
+    icon: Building2,
+  },
+  {
+    id: 'Field Officer',
+    label: 'Field Officer',
+    sublabel: 'Ground Verification',
+    defaultEmail: 'field.officer@morth.gov.in',
+    icon: Footprints,
+  },
+  {
+    id: 'Viewer',
+    label: 'Parcel Owner',
+    sublabel: 'Citizen Viewer',
+    defaultEmail: 'viewer.test@morth.gov.in',
+    icon: User,
+  },
+]
+
 function LoginForm() {
   const searchParams = useSearchParams()
   const nextParam = searchParams.get('next')
   const targetPath = getSafeNextPath(nextParam)
 
+  const [selectedRole, setSelectedRole] = useState<LoginRoleOption['id']>('MoRTH Nodal Officer')
   const [email, setEmail] = useState<string>('a.sharma@morth.gov.in')
   const [password, setPassword] = useState<string>('NLAMS2026Secure!')
   const [loading, setLoading] = useState<boolean>(false)
+  const [adminDemoLoading, setAdminDemoLoading] = useState<boolean>(false)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
   const [mode, setMode] = useState<'signin' | 'signup'>('signin')
 
+  const adminBypassEnabled = isAdminDemoBypassEnabled()
+
+  /**
+   * Isolated Demo Mode Bypass handler for Admin:
+   * Clicking "Admin" directly opens the existing Admin Dashboard (`/`)
+   * without asking for email, password, OTP, or any other credential.
+   */
+  async function handleAdminDemoDirectLogin() {
+    if (!adminBypassEnabled) {
+      setSelectedRole('Admin')
+      setEmail('admin@morth.gov.in')
+      setPassword('')
+      return
+    }
+
+    setSelectedRole('Admin')
+    setErrorMsg(null)
+    setAdminDemoLoading(true)
+
+    try {
+      enableAdminDemoClientCookie()
+      await fetch('/api/auth/admin-demo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      })
+    } catch {
+      // Cookie is already set client-side as fallback
+    }
+
+    window.location.href = targetPath || '/'
+  }
+
+  function handleRoleSelect(roleOption: LoginRoleOption) {
+    setErrorMsg(null)
+    if (roleOption.id === 'Admin' && adminBypassEnabled) {
+      void handleAdminDemoDirectLogin()
+      return
+    }
+    setSelectedRole(roleOption.id)
+    setEmail(roleOption.defaultEmail)
+  }
+
   async function handleAuthSubmit(e: React.FormEvent) {
     e.preventDefault()
+
+    // If Admin role is selected in demo mode, bypass credential prompt directly
+    if (selectedRole === 'Admin' && adminBypassEnabled) {
+      await handleAdminDemoDirectLogin()
+      return
+    }
+
     setLoading(true)
     setErrorMsg(null)
 
@@ -119,7 +233,6 @@ function LoginForm() {
     }
   }
 
-
   return (
     <div className="min-h-screen bg-background flex flex-col justify-between">
       {/* Top Tricolor rule */}
@@ -159,6 +272,82 @@ function LoginForm() {
                 <ShieldCheck className="size-3" />
                 SSL Encrypted
               </span>
+            </div>
+
+            {/* Role Selection / Instant Admin Demo Access */}
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Select Portal Role
+                </span>
+                {adminBypassEnabled && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 border border-amber-500/30 px-2 py-0.5 text-[10px] font-semibold text-amber-800 dark:text-amber-300">
+                    Admin: Instant Demo Access
+                  </span>
+                )}
+              </div>
+
+              {/* Dedicated One-Click Admin Button (No Password / Email / OTP Required) */}
+              {adminBypassEnabled && (
+                <button
+                  type="button"
+                  onClick={handleAdminDemoDirectLogin}
+                  disabled={adminDemoLoading || loading}
+                  className="w-full flex items-center justify-between gap-3 rounded-lg border-2 border-primary/40 bg-primary/5 hover:bg-primary/10 px-3.5 py-2.5 text-left transition-all cursor-pointer group disabled:opacity-60"
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground shadow-2xs">
+                      {adminDemoLoading ? (
+                        <RefreshCw className="size-4 animate-spin" />
+                      ) : (
+                        <Crown className="size-4" />
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-bold text-foreground">Admin</span>
+                        <span className="rounded bg-emerald-500/15 px-1.5 py-0.2 text-[9px] font-bold uppercase text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
+                          Demo Mode · No Password
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-muted-foreground truncate">
+                        {adminDemoLoading
+                          ? 'Opening Admin Dashboard...'
+                          : 'Click to directly open the Admin Dashboard'}
+                      </p>
+                    </div>
+                  </div>
+                  <ArrowRight className="size-4 shrink-0 text-primary group-hover:translate-x-0.5 transition-transform" />
+                </button>
+              )}
+
+              {/* Role Switcher Pills (Field Officer & other roles still require full authentication) */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 pt-0.5">
+                {ROLE_OPTIONS.filter((r) => !adminBypassEnabled || r.id !== 'Admin').map(
+                  (roleOpt) => {
+                    const Icon = roleOpt.icon
+                    const isSelected = selectedRole === roleOpt.id
+                    return (
+                      <button
+                        key={roleOpt.id}
+                        type="button"
+                        onClick={() => handleRoleSelect(roleOpt)}
+                        disabled={adminDemoLoading || loading}
+                        className={`flex flex-col items-center justify-center gap-1 rounded-md border px-2 py-2 text-center transition-colors cursor-pointer ${
+                          isSelected
+                            ? 'border-primary bg-primary/10 text-primary font-semibold'
+                            : 'border-border bg-background/60 text-muted-foreground hover:bg-accent hover:text-foreground'
+                        }`}
+                      >
+                        <Icon className="size-3.5 shrink-0" />
+                        <span className="text-[10px] leading-tight truncate w-full">
+                          {roleOpt.label}
+                        </span>
+                      </button>
+                    )
+                  }
+                )}
+              </div>
             </div>
 
             {errorMsg && (
@@ -202,7 +391,7 @@ function LoginForm() {
 
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || adminDemoLoading}
                 className="w-full inline-flex items-center justify-center gap-2 rounded-md bg-primary py-2.5 px-4 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors disabled:opacity-50 cursor-pointer"
               >
                 {loading ? (

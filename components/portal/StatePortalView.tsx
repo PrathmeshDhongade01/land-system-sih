@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback, useMemo } from 'react'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import {
@@ -31,6 +32,7 @@ import {
   Layers,
   LogOut,
   MapPin,
+  Maximize2,
   RefreshCw,
   Ruler,
   Search,
@@ -48,6 +50,8 @@ import {
   Plus,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+
+const MapComponent = dynamic(() => import('@/components/Map'), { ssr: false })
 
 function ChakraEmblem({ className }: { className?: string }) {
   const spokes = Array.from({ length: 24 })
@@ -89,10 +93,22 @@ export default function StatePortalView({ userEmail, userRole }: StatePortalView
     router.refresh()
   }
 
+  const defaultSamruddhiProject = {
+    id: '01843f0d-072e-4e25-a0a7-fcd7ed02ea10',
+    project_code: 'SM-NASHIK-DEMO-01',
+    project_name: 'Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo',
+    state: 'Maharashtra',
+    district: 'Nashik',
+    status: 'Active',
+    total_area_required_ha: 97.48,
+    gis_file_url: '/gis/SM-NASHIK-DEMO-01.geojson',
+  }
+
   // Data States
   const [kpiData, setKpiData] = useState<DashboardKpis | null>(null)
   const [kpiLoading, setKpiLoading] = useState<boolean>(true)
-  const [projectsList, setProjectsList] = useState<any[]>([])
+  const [projectsList, setProjectsList] = useState<any[]>([defaultSamruddhiProject])
+  const [defaultProjectMissingFromDb, setDefaultProjectMissingFromDb] = useState<boolean>(false)
   const [parcels, setParcels] = useState<any[]>([])
   const [workflows, setWorkflows] = useState<any[]>([])
   const [assignments, setAssignments] = useState<any[]>([])
@@ -118,7 +134,7 @@ export default function StatePortalView({ userEmail, userRole }: StatePortalView
 
   // Operational Filters
   const [selectedStateFilter, setSelectedStateFilter] = useState<string>('ALL')
-  const [selectedProjectFilter, setSelectedProjectFilter] = useState<string>('ALL')
+  const [selectedProjectFilter, setSelectedProjectFilter] = useState<string>('SM-NASHIK-DEMO-01')
   const [verificationFilter, setVerificationFilter] = useState<string>('ALL')
   const [searchQuery, setSearchQuery] = useState<string>('')
 
@@ -161,7 +177,28 @@ export default function StatePortalView({ userEmail, userRole }: StatePortalView
           fetchRecentProjectStatuses(15, client),
         ])
 
-        if (pRes.data) setProjectsList(pRes.data)
+        if (pRes.data && pRes.data.length > 0) {
+          const hasSamruddhi = pRes.data.some((p: any) => p.project_code === 'SM-NASHIK-DEMO-01')
+          if (hasSamruddhi) {
+            const normalized = pRes.data.map((p: any) =>
+              p.project_code === 'SM-NASHIK-DEMO-01'
+                ? {
+                    ...p,
+                    project_name: p.project_name || defaultSamruddhiProject.project_name,
+                    gis_file_url: p.gis_file_url || defaultSamruddhiProject.gis_file_url,
+                  }
+                : p
+            )
+            setProjectsList(normalized)
+            setDefaultProjectMissingFromDb(false)
+          } else {
+            setProjectsList([defaultSamruddhiProject, ...pRes.data])
+            setDefaultProjectMissingFromDb(true)
+          }
+        } else {
+          setProjectsList([defaultSamruddhiProject])
+          setDefaultProjectMissingFromDb(true)
+        }
         if (parcRes.data) setParcels(parcRes.data)
         if (wfRes.data) setWorkflows(wfRes.data)
         if (asRes.data) setAssignments(asRes.data)
@@ -389,6 +426,78 @@ export default function StatePortalView({ userEmail, userRole }: StatePortalView
               </p>
               <p className="text-[10px] text-muted-foreground mt-1">Pending verification / awards</p>
             </article>
+          </div>
+        </section>
+
+        {/* ACQUISITION MAP: SAMRUDDHI MAHAMARG NASHIK CORRIDOR DEFAULT */}
+        <section className="flex flex-col rounded-xl border border-border bg-card shadow-2xs overflow-hidden">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-3.5">
+            <div>
+              <h2 className="font-serif text-base font-bold text-foreground">Acquisition Map</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">GIS corridor view · Land parcel overlay</p>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <select
+                value={selectedProjectFilter}
+                onChange={(e) => setSelectedProjectFilter(e.target.value)}
+                aria-label="Select Acquisition Map Project"
+                className="rounded-md border border-border bg-background px-2.5 py-1 text-xs font-medium text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring"
+              >
+                <option value="ALL">All Projects</option>
+                {projectsList.map((p: any) => (
+                  <option key={p.project_code} value={p.project_code}>
+                    {p.project_code} — {p.project_name}
+                  </option>
+                ))}
+              </select>
+              <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1.5 font-medium">
+                  <span className="size-2.5 rounded-full bg-indigo-500" /> Corridor
+                </span>
+                <span className="flex items-center gap-1.5 font-medium">
+                  <span className="size-2.5 rounded-full bg-emerald-600" /> Acquired
+                </span>
+                <span className="flex items-center gap-1.5 font-medium">
+                  <span className="size-2.5 rounded-full bg-amber-500" /> Pending
+                </span>
+              </div>
+              <Link
+                href="/field-verification"
+                className="flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1 text-xs font-semibold text-foreground transition-colors hover:bg-muted"
+              >
+                <Maximize2 className="size-3.5" /> View Full Map
+              </Link>
+            </div>
+          </div>
+          <div className="relative h-96 flex-1 bg-slate-900">
+            <MapComponent
+              parcels={filteredParcels}
+              projectCode={
+                selectedProjectFilter === 'ALL'
+                  ? undefined
+                  : (selectedProjectFilter || 'SM-NASHIK-DEMO-01')
+              }
+              projectName={
+                selectedProjectFilter === 'ALL'
+                  ? undefined
+                  : (
+                      projectsList.find((p: any) => p.project_code === selectedProjectFilter)?.project_name ||
+                      (selectedProjectFilter === 'SM-NASHIK-DEMO-01'
+                        ? 'Mumbai–Nagpur Samruddhi Expressway — Nashik Corridor Demo'
+                        : undefined)
+                    )
+              }
+              projectGisUrl={
+                selectedProjectFilter === 'ALL'
+                  ? undefined
+                  : (
+                      projectsList.find((p: any) => p.project_code === selectedProjectFilter)?.gis_file_url ||
+                      (selectedProjectFilter === 'SM-NASHIK-DEMO-01'
+                        ? '/gis/SM-NASHIK-DEMO-01.geojson'
+                        : undefined)
+                    )
+              }
+            />
           </div>
         </section>
 

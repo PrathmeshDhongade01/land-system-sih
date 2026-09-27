@@ -1,5 +1,11 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
+import {
+  ADMIN_DEMO_COOKIE_NAME,
+  getDemoAdminProfile,
+  getDemoAdminUser,
+  isAdminDemoBypassEnabled,
+} from '@/lib/demo/adminDemoBypass'
 
 const defaultUrl = 'https://udpruwshnzrqlhrslbsf.supabase.co'
 const defaultKey =
@@ -29,6 +35,16 @@ export async function createClient() {
   })
 }
 
+export async function isServerAdminDemoActive(): Promise<boolean> {
+  if (!isAdminDemoBypassEnabled()) return false
+  try {
+    const cookieStore = await cookies()
+    return cookieStore.get(ADMIN_DEMO_COOKIE_NAME)?.value === 'true'
+  } catch {
+    return false
+  }
+}
+
 export async function getAuthenticatedUser() {
   const supabase = await createClient()
   const {
@@ -37,6 +53,14 @@ export async function getAuthenticatedUser() {
   } = await supabase.auth.getUser()
 
   if (error || !user) {
+    if (await isServerAdminDemoActive()) {
+      const serviceClient = createServiceRoleClient()
+      return {
+        user: getDemoAdminUser(),
+        supabase: serviceClient || supabase,
+        error: null,
+      }
+    }
     return { user: null, supabase, error }
   }
 
@@ -71,6 +95,16 @@ export async function getAuthenticatedUserWithProfile(): Promise<AuthWithProfile
   } = await supabase.auth.getUser()
 
   if (authError || !user) {
+    if (await isServerAdminDemoActive()) {
+      const serviceClient = createServiceRoleClient()
+      return {
+        user: getDemoAdminUser(),
+        profile: getDemoAdminProfile(),
+        supabase: serviceClient || supabase,
+        error: null,
+        status: 200,
+      }
+    }
     return {
       user: null,
       profile: null,

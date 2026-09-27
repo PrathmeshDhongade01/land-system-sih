@@ -10,6 +10,9 @@ const ALLOWED_VERIFICATION_STATUSES = new Set(['Pending', 'Verified', 'Needs Rev
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
+const PARCEL_SELECT_COLUMNS =
+  'id, project_id, project_code, parcel_number, parcel_no, owner_name, village_name, taluka_name, district, state, survey_number, survey_no, khasra_no, notified_area_sqm, affected_area_sqm, possession_status, land_type, field_verification_status, field_verified_at, field_verified_by, field_remarks, latitude, longitude, compensation_assessed, compensation_approved, compensation_paid, payment_status, payment_reference, payment_released_at, rehabilitation_status, rehabilitation_amount, rehabilitation_remarks, rehabilitation_completed_at, owner_profile_id, created_at, updated_at'
+
 /* -------------------------------------------------------------------------- */
 /* GET /api/parcels                                                           */
 /* -------------------------------------------------------------------------- */
@@ -59,9 +62,7 @@ export async function GET(request: Request) {
 
     let query = authRes.supabase
       .from('land_parcels')
-      .select(
-        'id, project_id, project_code, parcel_number, parcel_no, owner_name, village_name, taluka_name, district, state, survey_number, survey_no, khasra_no, notified_area_sqm, affected_area_sqm, possession_status, land_type, field_verification_status, field_verified_at, field_verified_by, field_remarks, latitude, longitude, compensation_assessed, compensation_approved, compensation_paid, payment_status, payment_reference, payment_released_at, rehabilitation_status, rehabilitation_amount, rehabilitation_remarks, rehabilitation_completed_at, owner_profile_id, created_at, updated_at'
-      )
+      .select(PARCEL_SELECT_COLUMNS)
       .order('created_at', { ascending: false })
 
     // Server-side role scoping
@@ -152,7 +153,10 @@ export async function GET(request: Request) {
     const { data, error } = await query
 
     if (error) {
-      if (userRole === 'Viewer' && (error.code === 'PGRST204' || (error.message && error.message.includes('owner_profile_id')))) {
+      if (
+        userRole === 'Viewer' &&
+        (error.code === 'PGRST204' || (error.message && error.message.includes('owner_profile_id')))
+      ) {
         return NextResponse.json({ success: true, data: [] }, { status: 200 })
       }
       console.error('Error fetching land_parcels in GET /api/parcels:', error)
@@ -211,7 +215,8 @@ export async function PATCH(request: Request) {
       )
     }
 
-    const { id, field_verification_status, field_remarks } = body || {}
+    const { id, field_verification_status, field_remarks, land_type, possession_status } =
+      body || {}
 
     if (!id || typeof id !== 'string' || !id.trim()) {
       return NextResponse.json(
@@ -233,7 +238,10 @@ export async function PATCH(request: Request) {
       (typeof field_verification_status !== 'string' || !field_verification_status.trim())
     ) {
       return NextResponse.json(
-        { success: false, error: 'field_verification_status must be a non-empty string when provided.' },
+        {
+          success: false,
+          error: 'field_verification_status must be a non-empty string when provided.',
+        },
         { status: 400 }
       )
     }
@@ -255,15 +263,26 @@ export async function PATCH(request: Request) {
       trimmedStatus = statusVal
     }
 
-    if (field_verification_status === undefined && field_remarks === undefined) {
+    if (
+      field_verification_status === undefined &&
+      field_remarks === undefined &&
+      land_type === undefined &&
+      possession_status === undefined
+    ) {
       return NextResponse.json(
-        { success: false, error: 'At least one field to update (field_verification_status or field_remarks) must be provided.' },
+        {
+          success: false,
+          error:
+            'At least one field to update (field_verification_status, field_remarks, land_type, or possession_status) must be provided.',
+        },
         { status: 400 }
       )
     }
 
+    const dbClient = createServiceRoleClient() || authRes.supabase
+
     // 1. Verify Parcel Exists
-    const { data: existingParcel, error: findErr } = await authRes.supabase
+    const { data: existingParcel, error: findErr } = await dbClient
       .from('land_parcels')
       .select('id, field_verification_status, field_verified_at, field_verified_by, field_remarks')
       .eq('id', trimmedId)
@@ -286,7 +305,6 @@ export async function PATCH(request: Request) {
 
     // 1b. For Field Officer: Verify active assignment before allowing update
     if (authRes.profile.role === 'Field Officer') {
-      const dbClient = createServiceRoleClient() || authRes.supabase
       const { data: activeAssignment, error: assignCheckErr } = await dbClient
         .from('parcel_assignments')
         .select('id')
@@ -305,7 +323,10 @@ export async function PATCH(request: Request) {
 
       if (!activeAssignment) {
         return NextResponse.json(
-          { success: false, error: 'Access denied. You can only update parcels actively assigned to you.' },
+          {
+            success: false,
+            error: 'Access denied. You can only update parcels actively assigned to you.',
+          },
           { status: 403 }
         )
       }
@@ -331,19 +352,34 @@ export async function PATCH(request: Request) {
       }
     }
 
+    if (land_type !== undefined && typeof land_type === 'string' && land_type.trim()) {
+      updates.land_type = land_type.trim()
+    }
+
+    if (
+      possession_status !== undefined &&
+      typeof possession_status === 'string' &&
+      possession_status.trim()
+    ) {
+      updates.possession_status = possession_status.trim()
+    }
+
     if (field_remarks !== undefined) {
-      updates.field_remarks = typeof field_remarks === 'string' ? field_remarks.trim() : null
+      const newRemarks = typeof field_remarks === 'string' ? field_remarks.trim() : ''
+      const priorRemarks = existingParcel.field_remarks ? existingParcel.field_remarks.trim() : ''
+      if (priorRemarks && newRemarks && !newRemarks.includes(priorRemarks)) {
+        updates.field_remarks = `${newRemarks}\n[Prior Note: ${priorRemarks}]`
+      } else {
+        updates.field_remarks = newRemarks || null
+      }
     }
 
     // 3. Execute Controlled Database Update
-    const dbClient = createServiceRoleClient() || authRes.supabase
     const { data: updatedData, error: updateErr } = await dbClient
       .from('land_parcels')
       .update(updates)
       .eq('id', trimmedId)
-      .select(
-        'id, project_id, project_code, parcel_number, parcel_no, owner_name, village_name, survey_number, survey_no, khasra_no, notified_area_sqm, affected_area_sqm, possession_status, land_type, field_verification_status, field_verified_at, field_verified_by, field_remarks, latitude, longitude, compensation_assessed, compensation_approved, compensation_paid, payment_status, rehabilitation_status, created_at, updated_at'
-      )
+      .select(PARCEL_SELECT_COLUMNS)
 
     if (updateErr) {
       console.error('Update error in PATCH /api/parcels:', updateErr)
