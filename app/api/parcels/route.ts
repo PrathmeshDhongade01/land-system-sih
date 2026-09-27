@@ -19,7 +19,7 @@ const PARCEL_SELECT_COLUMNS =
 
 export async function GET(request: Request) {
   try {
-    const authRes = await getAuthenticatedUserWithProfile()
+    const authRes = await getAuthenticatedUserWithProfile(request)
     if (authRes.status !== 200 || !authRes.profile) {
       return NextResponse.json(
         { success: false, error: authRes.error || 'Authentication required' },
@@ -182,7 +182,7 @@ export async function GET(request: Request) {
 
 export async function PATCH(request: Request) {
   try {
-    const authRes = await getAuthenticatedUserWithProfile()
+    const authRes = await getAuthenticatedUserWithProfile(request)
     if (authRes.status !== 200 || !authRes.profile) {
       return NextResponse.json(
         { success: false, error: authRes.error || 'Authentication required' },

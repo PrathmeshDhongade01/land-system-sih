@@ -80,7 +80,6 @@ type LoginRoleOption = {
   id: 'Admin' | 'MoRTH Nodal Officer' | 'SLAO' | 'Field Officer' | 'Viewer'
   label: string
   sublabel: string
-  defaultEmail: string
   icon: React.ElementType
 }
 
@@ -89,35 +88,30 @@ const ROLE_OPTIONS: LoginRoleOption[] = [
     id: 'Admin',
     label: 'Admin',
     sublabel: 'Master System Console',
-    defaultEmail: 'admin@morth.gov.in',
     icon: Crown,
   },
   {
     id: 'MoRTH Nodal Officer',
     label: 'Central Officer',
     sublabel: 'MoRTH Nodal Officer',
-    defaultEmail: 'a.sharma@morth.gov.in',
     icon: Globe,
   },
   {
     id: 'SLAO',
     label: 'State Officer',
     sublabel: 'SLAO / CALA',
-    defaultEmail: 'slao@morth.gov.in',
     icon: Building2,
   },
   {
     id: 'Field Officer',
     label: 'Field Officer',
     sublabel: 'Ground Verification',
-    defaultEmail: 'field.officer@morth.gov.in',
     icon: Footprints,
   },
   {
     id: 'Viewer',
     label: 'Parcel Owner',
     sublabel: 'Citizen Viewer',
-    defaultEmail: 'viewer.test@morth.gov.in',
     icon: User,
   },
 ]
@@ -128,8 +122,8 @@ function LoginForm() {
   const targetPath = getSafeNextPath(nextParam)
 
   const [selectedRole, setSelectedRole] = useState<LoginRoleOption['id']>('MoRTH Nodal Officer')
-  const [email, setEmail] = useState<string>('a.sharma@morth.gov.in')
-  const [password, setPassword] = useState<string>('NLAMS2026Secure!')
+  const [email, setEmail] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
   const [adminDemoLoading, setAdminDemoLoading] = useState<boolean>(false)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
@@ -138,19 +132,17 @@ function LoginForm() {
   const adminBypassEnabled = isAdminDemoBypassEnabled()
 
   /**
-   * Isolated Demo Mode Bypass handler for Admin:
-   * Clicking "Admin" directly opens the existing Admin Dashboard (`/`)
-   * without asking for email, password, OTP, or any other credential.
+   * Passwordless direct portal entry for Central Officer / Admin when demo bypass is enabled.
+   * No hardcoded or default passwords are stored or pre-populated.
    */
-  async function handleAdminDemoDirectLogin() {
+  async function handleAdminDemoDirectLogin(roleId: LoginRoleOption['id'] = 'Admin') {
     if (!adminBypassEnabled) {
-      setSelectedRole('Admin')
-      setEmail('admin@morth.gov.in')
+      setSelectedRole(roleId)
       setPassword('')
       return
     }
 
-    setSelectedRole('Admin')
+    setSelectedRole(roleId)
     setErrorMsg(null)
     setAdminDemoLoading(true)
 
@@ -169,20 +161,27 @@ function LoginForm() {
 
   function handleRoleSelect(roleOption: LoginRoleOption) {
     setErrorMsg(null)
-    if (roleOption.id === 'Admin' && adminBypassEnabled) {
-      void handleAdminDemoDirectLogin()
+    setPassword('')
+    if (
+      (roleOption.id === 'Admin' || roleOption.id === 'MoRTH Nodal Officer') &&
+      adminBypassEnabled
+    ) {
+      void handleAdminDemoDirectLogin(roleOption.id)
       return
     }
     setSelectedRole(roleOption.id)
-    setEmail(roleOption.defaultEmail)
   }
 
   async function handleAuthSubmit(e: React.FormEvent) {
     e.preventDefault()
 
-    // If Admin role is selected in demo mode, bypass credential prompt directly
-    if (selectedRole === 'Admin' && adminBypassEnabled) {
-      await handleAdminDemoDirectLogin()
+    // If Admin or Central Officer role is selected in demo mode without password, allow direct entry
+    if (
+      (selectedRole === 'Admin' || selectedRole === 'MoRTH Nodal Officer') &&
+      adminBypassEnabled &&
+      !password.trim()
+    ) {
+      await handleAdminDemoDirectLogin(selectedRole)
       return
     }
 
@@ -198,9 +197,10 @@ function LoginForm() {
       })
 
       if (error) {
-        // If account doesn't exist yet in Supabase Auth, offer easy registration
         if (error.message.toLowerCase().includes('invalid login credentials')) {
-          setErrorMsg('Invalid credentials. If this is your first time logging in, click "Register Nodal Account" below.')
+          setErrorMsg(
+            'Invalid credentials. If this is your first time logging in, click "Register Nodal Account" below.'
+          )
         } else {
           setErrorMsg(error.message)
         }
@@ -274,7 +274,7 @@ function LoginForm() {
               </span>
             </div>
 
-            {/* Role Selection / Instant Admin Demo Access */}
+            {/* Role Selection / Passwordless Central & Admin Access */}
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
@@ -282,16 +282,15 @@ function LoginForm() {
                 </span>
                 {adminBypassEnabled && (
                   <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 border border-amber-500/30 px-2 py-0.5 text-[10px] font-semibold text-amber-800 dark:text-amber-300">
-                    Admin: Instant Demo Access
+                    Central / Admin: Password Removed
                   </span>
                 )}
               </div>
 
-              {/* Dedicated One-Click Admin Button (No Password / Email / OTP Required) */}
               {adminBypassEnabled && (
                 <button
                   type="button"
-                  onClick={handleAdminDemoDirectLogin}
+                  onClick={() => handleAdminDemoDirectLogin('MoRTH Nodal Officer')}
                   disabled={adminDemoLoading || loading}
                   className="w-full flex items-center justify-between gap-3 rounded-lg border-2 border-primary/40 bg-primary/5 hover:bg-primary/10 px-3.5 py-2.5 text-left transition-all cursor-pointer group disabled:opacity-60"
                 >
@@ -305,15 +304,17 @@ function LoginForm() {
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-bold text-foreground">Admin</span>
+                        <span className="text-xs font-bold text-foreground">
+                          Central Officer / Admin
+                        </span>
                         <span className="rounded bg-emerald-500/15 px-1.5 py-0.2 text-[9px] font-bold uppercase text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
-                          Demo Mode · No Password
+                          No Password Required
                         </span>
                       </div>
                       <p className="text-[11px] text-muted-foreground truncate">
                         {adminDemoLoading
-                          ? 'Opening Admin Dashboard...'
-                          : 'Click to directly open the Admin Dashboard'}
+                          ? 'Opening Central Dashboard...'
+                          : 'Click to directly open the Central / Admin Dashboard'}
                       </p>
                     </div>
                   </div>
@@ -321,7 +322,7 @@ function LoginForm() {
                 </button>
               )}
 
-              {/* Role Switcher Pills (Field Officer & other roles still require full authentication) */}
+              {/* Role Switcher Pills */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 pt-0.5">
                 {ROLE_OPTIONS.filter((r) => !adminBypassEnabled || r.id !== 'Admin').map(
                   (roleOpt) => {
@@ -370,7 +371,8 @@ function LoginForm() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="e.g. a.sharma@morth.gov.in"
+                  placeholder="Enter official email address"
+                  autoComplete="email"
                   className="w-full rounded-md border border-input bg-background p-2.5 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-ring"
                 />
               </div>
@@ -385,6 +387,7 @@ function LoginForm() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
+                  autoComplete="current-password"
                   className="w-full rounded-md border border-input bg-background p-2.5 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-ring"
                 />
               </div>
@@ -468,4 +471,3 @@ export default function LoginPage() {
     </Suspense>
   )
 }
-
