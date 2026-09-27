@@ -1,8 +1,32 @@
 'use client'
 
+<<<<<<< HEAD
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { ShieldCheck, AlertCircle, RefreshCw, LogIn, UserPlus } from 'lucide-react'
+=======
+import { useState, Suspense } from 'react'
+import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
+import { ShieldCheck, AlertCircle, RefreshCw, LogIn, UserPlus, Shield } from 'lucide-react'
+
+function getSafeNextPath(rawNext: string | null | undefined): string {
+  if (!rawNext) return '/'
+  const trimmed = rawNext.trim()
+  if (trimmed.startsWith('/') && !trimmed.startsWith('//') && !trimmed.startsWith('/\\')) {
+    try {
+      const parsed = new URL(trimmed, 'http://localhost')
+      if (parsed.origin === 'http://localhost') {
+        return parsed.pathname + parsed.search + parsed.hash
+      }
+    } catch {
+      return '/'
+    }
+  }
+  return '/'
+}
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
 
 function ChakraEmblem({ className }: { className?: string }) {
   const spokes = Array.from({ length: 24 })
@@ -41,7 +65,15 @@ function ChakraEmblem({ className }: { className?: string }) {
   )
 }
 
+<<<<<<< HEAD
 export default function LoginPage() {
+=======
+function LoginForm() {
+  const searchParams = useSearchParams()
+  const nextParam = searchParams.get('next')
+  const targetPath = getSafeNextPath(nextParam)
+
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
   const [email, setEmail] = useState<string>('a.sharma@morth.gov.in')
   const [password, setPassword] = useState<string>('NLAMS2026Secure!')
   const [loading, setLoading] = useState<boolean>(false)
@@ -73,7 +105,11 @@ export default function LoginPage() {
       }
 
       if (data.session) {
+<<<<<<< HEAD
         window.location.href = '/'
+=======
+        window.location.href = targetPath
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
       }
     } else {
       const { data, error } = await supabase.auth.signUp({
@@ -88,7 +124,11 @@ export default function LoginPage() {
       }
 
       if (data.session) {
+<<<<<<< HEAD
         window.location.href = '/'
+=======
+        window.location.href = targetPath
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
       } else {
         setErrorMsg('Account created! Please sign in with your email and password.')
         setMode('signin')
@@ -97,6 +137,10 @@ export default function LoginPage() {
     }
   }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
   return (
     <div className="min-h-screen bg-background flex flex-col justify-between">
       {/* Top Tricolor rule */}
@@ -215,6 +259,26 @@ export default function LoginPage() {
               <span>v3.2.1 Official</span>
             </div>
           </div>
+<<<<<<< HEAD
+=======
+
+          {/* Jury Demo Mode Banner */}
+          <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-center space-y-2 shadow-2xs">
+            <div className="flex items-center justify-center gap-1.5 font-bold text-xs text-amber-800 dark:text-amber-300">
+              <Shield className="size-4 text-amber-600" />
+              <span>Hackathon Jury Demo Mode</span>
+            </div>
+            <p className="text-[11px] text-muted-foreground leading-relaxed">
+              Evaluating NLAMS without login credentials? Explore all 4 role portals directly with synthetic demo data.
+            </p>
+            <Link
+              href="/demo"
+              className="inline-flex items-center gap-1 font-semibold text-primary hover:underline text-xs"
+            >
+              <span>Launch Public Jury Demo &rarr;</span>
+            </Link>
+          </div>
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
         </div>
       </main>
 
@@ -225,3 +289,21 @@ export default function LoginPage() {
     </div>
   )
 }
+<<<<<<< HEAD
+=======
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-background flex items-center justify-center">
+          <RefreshCw className="size-8 animate-spin text-primary" />
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
+  )
+}
+
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2

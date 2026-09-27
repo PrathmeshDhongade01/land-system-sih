@@ -20,7 +20,11 @@ const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024 // 10 MB
 
 export async function GET(request: Request) {
   try {
+<<<<<<< HEAD
     const authRes = await getAuthenticatedUserWithProfile(request)
+=======
+    const authRes = await getAuthenticatedUserWithProfile()
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
     if (authRes.status !== 200 || !authRes.profile) {
       return NextResponse.json(
         { success: false, error: authRes.error || 'Authentication required' },
@@ -55,6 +59,66 @@ export async function GET(request: Request) {
     }
 
     const trimmedParcelId = parcel_id.trim()
+<<<<<<< HEAD
+=======
+    const userRole = authRes.profile.role
+
+    // 1. Verify parcel exists
+    const { data: existingParcel, error: parcelErr } = await authRes.supabase
+      .from('land_parcels')
+      .select('id')
+      .eq('id', trimmedParcelId)
+      .maybeSingle()
+
+    if (parcelErr || !existingParcel) {
+      return NextResponse.json(
+        { success: false, error: 'Land parcel not found.' },
+        { status: 404 }
+      )
+    }
+
+    // 2. Role-based scoping for Viewer and Field Officer
+    if (userRole === 'Viewer') {
+      const { data: ownedParcel, error: checkErr } = await authRes.supabase
+        .from('land_parcels')
+        .select('id')
+        .eq('id', trimmedParcelId)
+        .eq('owner_profile_id', authRes.user.id)
+        .maybeSingle()
+
+      if (checkErr || !ownedParcel) {
+        return NextResponse.json(
+          { success: false, error: 'Access denied. You do not have permission to view evidence for this parcel.' },
+          { status: 403 }
+        )
+      }
+    } else if (userRole === 'Field Officer') {
+      const dbClient = createServiceRoleClient() || authRes.supabase
+      const { data: activeAssignment, error: aErr } = await dbClient
+        .from('parcel_assignments')
+        .select('id')
+        .eq('parcel_id', trimmedParcelId)
+        .eq('assigned_officer_id', authRes.user.id)
+        .eq('status', 'Active')
+        .maybeSingle()
+
+      if (aErr) {
+        console.error('Error verifying officer assignment in GET /api/evidence:', aErr)
+        return NextResponse.json(
+          { success: false, error: 'Database error verifying assignment permissions.' },
+          { status: 500 }
+        )
+      }
+
+      if (!activeAssignment) {
+        return NextResponse.json(
+          { success: false, error: 'Access denied. You are not actively assigned to this parcel.' },
+          { status: 403 }
+        )
+      }
+    }
+
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
     const dbClient = createServiceRoleClient() || authRes.supabase
 
     const { data: evidenceItems, error: fetchErr } = await authRes.supabase
@@ -108,7 +172,11 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+<<<<<<< HEAD
     const authRes = await getAuthenticatedUserWithProfile(request)
+=======
+    const authRes = await getAuthenticatedUserWithProfile()
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
     if (authRes.status !== 200 || !authRes.profile) {
       return NextResponse.json(
         { success: false, error: authRes.error || 'Authentication required' },
@@ -162,8 +230,12 @@ export async function POST(request: Request) {
     const trimmedParcelId = parcel_id.trim()
 
     // 1. Verify Parcel Exists
+<<<<<<< HEAD
     const dbClient = createServiceRoleClient() || authRes.supabase
     const { data: existingParcel, error: parcelErr } = await dbClient
+=======
+    const { data: existingParcel, error: parcelErr } = await authRes.supabase
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
       .from('land_parcels')
       .select('id')
       .eq('id', trimmedParcelId)
@@ -176,9 +248,16 @@ export async function POST(request: Request) {
       )
     }
 
+<<<<<<< HEAD
     // 1b. For Field Officer role, verify active assignment to authenticated user
     if (authRes.profile.role === 'Field Officer') {
       const { data: assignment, error: assignErr } = await dbClient
+=======
+    // 1b. For Field Officer: Verify active assignment before allowing evidence upload
+    if (authRes.profile.role === 'Field Officer') {
+      const dbClient = createServiceRoleClient() || authRes.supabase
+      const { data: activeAssignment, error: aErr } = await dbClient
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
         .from('parcel_assignments')
         .select('id')
         .eq('parcel_id', trimmedParcelId)
@@ -186,9 +265,23 @@ export async function POST(request: Request) {
         .eq('status', 'Active')
         .maybeSingle()
 
+<<<<<<< HEAD
       if (assignErr || !assignment) {
         return NextResponse.json(
           { success: false, error: 'Forbidden: This parcel is not actively assigned to you.' },
+=======
+      if (aErr) {
+        console.error('Error verifying officer assignment in POST /api/evidence:', aErr)
+        return NextResponse.json(
+          { success: false, error: 'Database error verifying assignment permissions.' },
+          { status: 500 }
+        )
+      }
+
+      if (!activeAssignment) {
+        return NextResponse.json(
+          { success: false, error: 'Access denied. You can only upload evidence for parcels actively assigned to you.' },
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
           { status: 403 }
         )
       }
@@ -271,6 +364,11 @@ export async function POST(request: Request) {
     const randomSuffix = Math.random().toString(36).substring(2, 10)
     const storagePath = `parcels/${trimmedParcelId}/${Date.now()}_${randomSuffix}.${fileExt}`
 
+<<<<<<< HEAD
+=======
+    const dbClient = createServiceRoleClient() || authRes.supabase
+
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
     // Ensure bucket exists on server (if using service role client)
     try {
       if (dbClient.storage) {
@@ -365,7 +463,11 @@ export async function POST(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
+<<<<<<< HEAD
     const authRes = await getAuthenticatedUserWithProfile(request)
+=======
+    const authRes = await getAuthenticatedUserWithProfile()
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
     if (authRes.status !== 200 || !authRes.profile) {
       return NextResponse.json(
         { success: false, error: authRes.error || 'Authentication required' },

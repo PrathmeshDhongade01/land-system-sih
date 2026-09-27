@@ -16,7 +16,11 @@ const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12
 
 export async function GET(request: Request) {
   try {
+<<<<<<< HEAD
     const authRes = await getAuthenticatedUserWithProfile(request)
+=======
+    const authRes = await getAuthenticatedUserWithProfile()
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
     if (authRes.status !== 200 || !authRes.profile) {
       return NextResponse.json(
         { success: false, error: authRes.error || 'Authentication required' },
@@ -55,6 +59,7 @@ export async function GET(request: Request) {
       )
     }
 
+<<<<<<< HEAD
     let query = authRes.supabase
       .from('land_parcels')
       .select(
@@ -62,6 +67,77 @@ export async function GET(request: Request) {
       )
       .order('created_at', { ascending: false })
 
+=======
+    const userRole = authRes.profile.role
+
+    let query = authRes.supabase
+      .from('land_parcels')
+      .select(
+        'id, project_id, project_code, parcel_number, parcel_no, owner_name, village_name, taluka_name, district, state, survey_number, survey_no, khasra_no, notified_area_sqm, affected_area_sqm, possession_status, land_type, field_verification_status, field_verified_at, field_verified_by, field_remarks, latitude, longitude, compensation_assessed, compensation_approved, compensation_paid, payment_status, payment_reference, payment_released_at, rehabilitation_status, rehabilitation_amount, rehabilitation_remarks, rehabilitation_completed_at, owner_profile_id, created_at, updated_at'
+      )
+      .order('created_at', { ascending: false })
+
+    // Server-side role scoping
+    if (userRole === 'Viewer') {
+      // Direct ID access check for Viewer
+      if (id && id.trim()) {
+        const reqId = id.trim()
+        const { data: ownedParcel, error: checkErr } = await authRes.supabase
+          .from('land_parcels')
+          .select('id')
+          .eq('id', reqId)
+          .eq('owner_profile_id', authRes.user.id)
+          .maybeSingle()
+
+        if (checkErr || !ownedParcel) {
+          return NextResponse.json(
+            { success: false, error: 'Access denied or parcel not found.' },
+            { status: 403 }
+          )
+        }
+      }
+
+      query = query.eq('owner_profile_id', authRes.user.id)
+    } else if (userRole === 'Field Officer') {
+      const dbClient = createServiceRoleClient() || authRes.supabase
+      const { data: assignments, error: assignErr } = await dbClient
+        .from('parcel_assignments')
+        .select('parcel_id')
+        .eq('assigned_officer_id', authRes.user.id)
+        .eq('status', 'Active')
+
+      if (assignErr) {
+        console.error('Error checking officer assignments in GET /api/parcels:', assignErr)
+        return NextResponse.json(
+          { success: false, error: 'Database query failed checking assignments' },
+          { status: 500 }
+        )
+      }
+
+      const assignedParcelIds = Array.from(
+        new Set((assignments || []).map((a: any) => a.parcel_id).filter(Boolean))
+      ) as string[]
+
+      // Direct ID access check for Field Officer
+      if (id && id.trim()) {
+        const reqId = id.trim()
+        if (!assignedParcelIds.includes(reqId)) {
+          return NextResponse.json(
+            { success: false, error: 'Access denied. You are not assigned to this parcel.' },
+            { status: 403 }
+          )
+        }
+      }
+
+      if (assignedParcelIds.length === 0) {
+        // Officer has no active assignments; return empty list securely
+        return NextResponse.json({ success: true, data: [] }, { status: 200 })
+      }
+
+      query = query.in('id', assignedParcelIds)
+    }
+
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
     if (id && id.trim()) {
       query = query.eq('id', id.trim())
     }
@@ -90,6 +166,12 @@ export async function GET(request: Request) {
     const { data, error } = await query
 
     if (error) {
+<<<<<<< HEAD
+=======
+      if (userRole === 'Viewer' && (error.code === 'PGRST204' || (error.message && error.message.includes('owner_profile_id')))) {
+        return NextResponse.json({ success: true, data: [] }, { status: 200 })
+      }
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
       console.error('Error fetching land_parcels in GET /api/parcels:', error)
       return NextResponse.json(
         { success: false, error: `Database query failed: ${error.message}` },
@@ -113,7 +195,11 @@ export async function GET(request: Request) {
 
 export async function PATCH(request: Request) {
   try {
+<<<<<<< HEAD
     const authRes = await getAuthenticatedUserWithProfile(request)
+=======
+    const authRes = await getAuthenticatedUserWithProfile()
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
     if (authRes.status !== 200 || !authRes.profile) {
       return NextResponse.json(
         { success: false, error: authRes.error || 'Authentication required' },
@@ -146,7 +232,11 @@ export async function PATCH(request: Request) {
       )
     }
 
+<<<<<<< HEAD
     const { id, field_verification_status, field_remarks, land_type, possession_status } = body || {}
+=======
+    const { id, field_verification_status, field_remarks } = body || {}
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
 
     if (!id || typeof id !== 'string' || !id.trim()) {
       return NextResponse.json(
@@ -190,6 +280,7 @@ export async function PATCH(request: Request) {
       trimmedStatus = statusVal
     }
 
+<<<<<<< HEAD
     if (
       field_verification_status === undefined &&
       field_remarks === undefined &&
@@ -198,14 +289,24 @@ export async function PATCH(request: Request) {
     ) {
       return NextResponse.json(
         { success: false, error: 'At least one field to update must be provided.' },
+=======
+    if (field_verification_status === undefined && field_remarks === undefined) {
+      return NextResponse.json(
+        { success: false, error: 'At least one field to update (field_verification_status or field_remarks) must be provided.' },
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
         { status: 400 }
       )
     }
 
+<<<<<<< HEAD
     const dbClient = createServiceRoleClient() || authRes.supabase
 
     // 1. Verify Parcel Exists
     const { data: existingParcel, error: findErr } = await dbClient
+=======
+    // 1. Verify Parcel Exists
+    const { data: existingParcel, error: findErr } = await authRes.supabase
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
       .from('land_parcels')
       .select('id, field_verification_status, field_verified_at, field_verified_by, field_remarks')
       .eq('id', trimmedId)
@@ -226,9 +327,16 @@ export async function PATCH(request: Request) {
       )
     }
 
+<<<<<<< HEAD
     // 1b. For Field Officer role, verify active assignment to authenticated user
     if (authRes.profile.role === 'Field Officer') {
       const { data: assignment, error: assignErr } = await dbClient
+=======
+    // 1b. For Field Officer: Verify active assignment before allowing update
+    if (authRes.profile.role === 'Field Officer') {
+      const dbClient = createServiceRoleClient() || authRes.supabase
+      const { data: activeAssignment, error: assignCheckErr } = await dbClient
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
         .from('parcel_assignments')
         .select('id')
         .eq('parcel_id', trimmedId)
@@ -236,9 +344,23 @@ export async function PATCH(request: Request) {
         .eq('status', 'Active')
         .maybeSingle()
 
+<<<<<<< HEAD
       if (assignErr || !assignment) {
         return NextResponse.json(
           { success: false, error: 'Forbidden: This parcel is not actively assigned to you.' },
+=======
+      if (assignCheckErr) {
+        console.error('Error verifying officer assignment in PATCH /api/parcels:', assignCheckErr)
+        return NextResponse.json(
+          { success: false, error: 'Database error verifying assignment permissions.' },
+          { status: 500 }
+        )
+      }
+
+      if (!activeAssignment) {
+        return NextResponse.json(
+          { success: false, error: 'Access denied. You can only update parcels actively assigned to you.' },
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
           { status: 403 }
         )
       }
@@ -264,6 +386,7 @@ export async function PATCH(request: Request) {
       }
     }
 
+<<<<<<< HEAD
     if (land_type !== undefined && typeof land_type === 'string' && land_type.trim()) {
       updates.land_type = land_type.trim()
     }
@@ -283,6 +406,14 @@ export async function PATCH(request: Request) {
     }
 
     // 3. Execute Controlled Database Update
+=======
+    if (field_remarks !== undefined) {
+      updates.field_remarks = typeof field_remarks === 'string' ? field_remarks.trim() : null
+    }
+
+    // 3. Execute Controlled Database Update
+    const dbClient = createServiceRoleClient() || authRes.supabase
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
     const { data: updatedData, error: updateErr } = await dbClient
       .from('land_parcels')
       .update(updates)

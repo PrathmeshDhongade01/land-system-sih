@@ -63,6 +63,7 @@ export interface AuthWithProfileResult {
   status: 401 | 403 | 200
 }
 
+<<<<<<< HEAD
 export function createClientForToken(token: string) {
   const url = (process.env.NEXT_PUBLIC_SUPABASE_URL || defaultUrl).trim()
   const key = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || defaultKey).trim()
@@ -113,19 +114,35 @@ export async function getAuthenticatedUserWithProfile(
     user = cookieUser
     authError = cookieAuthError
   }
+=======
+export async function getAuthenticatedUserWithProfile(): Promise<AuthWithProfileResult> {
+  const supabase = await createClient()
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser()
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
 
   if (authError || !user) {
     return {
       user: null,
       profile: null,
+<<<<<<< HEAD
       supabase: supabase || (await createClient()),
+=======
+      supabase,
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
       error: 'Authentication required',
       status: 401,
     }
   }
 
+<<<<<<< HEAD
   const dbClient = createServiceRoleClient() || supabase
   const { data: profile, error: profileError } = await dbClient
+=======
+  const { data: profile, error: profileError } = await supabase
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
     .from('profiles')
     .select('id, email, full_name, role, department, designation, is_active')
     .eq('id', user.id)

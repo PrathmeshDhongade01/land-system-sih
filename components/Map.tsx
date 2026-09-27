@@ -302,6 +302,7 @@ export default function Map({ conflictLocation, projectGisUrl, projectName, proj
             <GeoJSON
               key={projectGisUrl || 'project-geojson-layer'}
               data={projectGeoJson}
+<<<<<<< HEAD
               style={() => ({
                 color: '#059669',
                 fillColor: '#10b981',
@@ -323,6 +324,68 @@ export default function Map({ conflictLocation, projectGisUrl, projectName, proj
                   </div>
                 `;
                 layer.bindPopup(html);
+=======
+              style={(feature: any) => {
+                const props = feature?.properties || {}
+                const geomType = feature?.geometry?.type
+                if (props.layer_type === 'route' || geomType === 'LineString') {
+                  return { color: '#dc2626', weight: 4, opacity: 0.95 }
+                }
+                if (props.layer_type === 'corridor') {
+                  return { color: '#2563eb', weight: 1.5, fillColor: '#3b82f6', fillOpacity: 0.12, dashArray: '4, 4' }
+                }
+                if (props.layer_type === 'affected_area') {
+                  return { color: '#059669', weight: 2, fillColor: '#10b981', fillOpacity: 0.65 }
+                }
+                if (props.layer_type === 'parcel') {
+                  return { color: '#d97706', weight: 1.5, fillColor: '#f59e0b', fillOpacity: 0.2 }
+                }
+                return {
+                  color: '#059669',
+                  fillColor: '#10b981',
+                  fillOpacity: 0.35,
+                  weight: 3,
+                }
+              }}
+              onEachFeature={(feature, layer) => {
+                const props = feature.properties || {}
+                const name = props.name || props.parcel_id || props.project_name || projectName || 'Project Acquisition Boundary'
+                const isSynthetic = Boolean(props.is_synthetic)
+                const isAffected = props.layer_type === 'affected_area'
+                const isParcel = props.layer_type === 'parcel' || Boolean(props.parcel_id && !isAffected)
+
+                let bodyHtml = ''
+                if (props.parcel_id) {
+                  bodyHtml += `<div><strong>Parcel ID:</strong> ${props.parcel_id}</div>`
+                }
+                if (props.village) {
+                  bodyHtml += `<div><strong>Village:</strong> ${props.village}</div>`
+                }
+                if (props.total_area_ha !== undefined) {
+                  bodyHtml += `<div><strong>Total Area:</strong> ${props.total_area_ha} Ha</div>`
+                }
+                if (props.affected_area_ha !== undefined) {
+                  bodyHtml += `<div><strong>Affected Area:</strong> ${props.affected_area_ha} Ha (${props.affected_percentage ?? ''}%)</div>`
+                }
+                if (!bodyHtml) {
+                  bodyHtml = `<div><strong>Project Code:</strong> ${projectCode || 'N/A'}</div>`
+                }
+
+                const badge = isSynthetic
+                  ? '<span style="display: inline-block; margin-top: 8px; background: #fef3c7; color: #92400e; padding: 2px 6px; border-radius: 4px; font-weight: 600; font-size: 10px;">⚠️ Synthetic Prototype Geometry</span>'
+                  : '<span style="display: inline-block; margin-top: 8px; background: #d1fae5; color: #065f46; padding: 2px 6px; border-radius: 4px; font-weight: 600; font-size: 10px;">Official Project Acquisition Boundary</span>'
+
+                const html = `
+                  <div style="font-family: system-ui, sans-serif; font-size: 12px; padding: 4px; min-width: 200px;">
+                    <strong style="color: ${isAffected ? '#047857' : isParcel ? '#b45309' : '#1e3a8a'}; font-size: 13px;">📍 ${name}</strong>
+                    <div style="margin-top: 6px; display: grid; gap: 4px; color: #334155;">
+                      ${bodyHtml}
+                    </div>
+                    ${badge}
+                  </div>
+                `
+                layer.bindPopup(html)
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
               }}
             />
             <AutoFitProjectBounds geoJsonData={projectGeoJson} />

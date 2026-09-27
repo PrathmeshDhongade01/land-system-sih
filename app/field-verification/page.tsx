@@ -161,7 +161,11 @@ function FileQueueRow({ item, onRemove, onDescriptionChange }: {
 
 // ─── Main Content Component ────────────────────────────────────────────────────
 
+<<<<<<< HEAD
 function FieldVerificationContent() {
+=======
+export function FieldVerificationContent() {
+>>>>>>> 613c3c27221b6835942e50081b0cdf1c749af6a2
   const router = useRouter()
   const searchParams = useSearchParams()
   const parcelIdParam = searchParams.get('parcel_id')
