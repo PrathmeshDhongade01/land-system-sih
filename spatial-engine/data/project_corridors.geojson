@@ -1,0 +1,49 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "project_code": "NHAI-DEL-BOM-01",
+        "project_name": "Delhi–Mumbai Expressway Corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [77.020196, 28.4432555],
+          [72.6871144, 26.2938593],
+          [73.1029852, 22.2668551],
+          [73.7895091, 19.3384071]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "project_code": "NHAI-NSK-SURCHE",
+        "project_name": "Nashik–Surat Economic Highway"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [72.830000, 20.200000],
+          [74.200000, 21.400000]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "project_code": "NH-334B",
+        "project_name": "Rampur–Baghpat Expressway Corridor"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [77.200000, 28.940000],
+          [77.600000, 28.980000]
+        ]
+      }
+    }
+  ]
+}

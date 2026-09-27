@@ -1,26 +1,65 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-saffron: hsl(var(--saffron));
+  --color-saffron-foreground: hsl(var(--saffron-foreground));
+  --color-green-india: hsl(var(--green-india));
 }
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Government of India tricolour dashboard palette */
+    --background: 210 33% 98%;
+    --foreground: 221 62% 16%;
+    --card: 0 0% 100%;
+    --card-foreground: 221 62% 16%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 221 62% 16%;
+    --primary: 222 62% 31%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 142 60% 35%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 215 28% 95%;
+    --muted-foreground: 216 25% 42%;
+    --accent: 214 45% 96%;
+    --accent-foreground: 221 62% 16%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 27% 89%;
+    --input: 214 27% 89%;
+    --ring: 222 62% 31%;
+    --saffron: 28 90% 52%;
+    --saffron-foreground: 24 85% 22%;
+    --green-india: 142 60% 35%;
+    --radius: 0.5rem;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
 }
